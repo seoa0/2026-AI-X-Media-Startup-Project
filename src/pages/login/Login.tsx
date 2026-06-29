@@ -7,6 +7,7 @@ import { getFirebaseErrorMessage } from '../../shared/firebase/errors';
 import AnimatedGradientBackground from '../../shared/styles/AnimatedGradientBackground/AnimatedGradientBackground';
 import PageHeader from '../../shared/components/header/PageHeader';
 import { clearOnboardingGenre, getPostLoginPath } from '../../shared/utils/onboardingStorage';
+import { getRedirectIfNoActiveProduction } from '../../shared/utils/productionGuard';
 import { applyServerOnboarding } from '../../shared/utils/syncOnboarding';
 import './Login.css';
 
@@ -33,7 +34,8 @@ export default function Login() {
       applyServerOnboarding(data.user.onboarding);
       clearOnboardingGenre();
       setLoading(false);
-      navigate(getPostLoginPath());
+      const emptyProductionRedirect = await getRedirectIfNoActiveProduction();
+      navigate(emptyProductionRedirect ?? getPostLoginPath());
     } catch (err) {
       setError(getFirebaseErrorMessage(err, '이메일 또는 비밀번호가 올바르지 않습니다.'));
       setLoading(false);

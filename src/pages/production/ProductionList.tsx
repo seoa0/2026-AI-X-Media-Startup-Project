@@ -5,6 +5,7 @@ import ConfirmModal from '../../shared/components/modal/ConfirmModal';
 import ChatPageHeader from '../../shared/components/header/ChatPageHeader';
 import type { Song } from '../../shared/types/song';
 import { isLoggedIn } from '../../shared/utils/authStorage';
+import { restartOnboardingChat } from '../../shared/utils/onboardingStorage';
 import './ProductionList.css';
 
 function DeleteIcon() {
@@ -46,8 +47,13 @@ export default function ProductionList() {
     setDeleting(true);
     try {
       await songsApi.delete(pendingDelete.id);
-      setSongs((prev) => prev.filter((s) => s.id !== pendingDelete.id));
+      const next = songs.filter((s) => s.id !== pendingDelete.id);
+      setSongs(next);
       setPendingDelete(null);
+      if (next.length === 0) {
+        restartOnboardingChat();
+        navigate('/onboarding/chat', { replace: true });
+      }
     } catch {
       alert('삭제에 실패했습니다. 다시 시도해 주세요.');
     } finally {

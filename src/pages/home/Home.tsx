@@ -10,6 +10,7 @@ import AnimatedGradientBackground from '../../shared/styles/AnimatedGradientBack
 import type { Song } from '../../shared/types/song';
 import { isLoggedIn } from '../../shared/utils/authStorage';
 import { isOnboardingComplete } from '../../shared/utils/onboardingStorage';
+import { getRedirectIfNoActiveProduction } from '../../shared/utils/productionGuard';
 import { getHomeGuardRedirect } from '../../shared/utils/routeGuard';
 import './Home.css';
 
@@ -20,22 +21,32 @@ export default function Home() {
   const [loading, setLoading] = useState(loggedIn);
 
   useEffect(() => {
-    const redirect = getHomeGuardRedirect();
-    if (redirect) {
-      navigate(redirect, { replace: true });
-      return;
-    }
-
     if (!loggedIn) {
       setLoading(false);
       return;
     }
 
-    songsApi
-      .list('in_progress')
-      .then((res) => setSongs(res.data.songs))
-      .catch(() => setSongs([]))
-      .finally(() => setLoading(false));
+    const init = async () => {
+      const onboardingRedirect = getHomeGuardRedirect();
+      if (onboardingRedirect) {
+        navigate(onboardingRedirect, { replace: true });
+        return;
+      }
+
+      const emptyProductionRedirect = await getRedirectIfNoActiveProduction();
+      if (emptyProductionRedirect) {
+        navigate(emptyProductionRedirect, { replace: true });
+        return;
+      }
+
+      songsApi
+        .list('in_progress')
+        .then((res) => setSongs(res.data.songs))
+        .catch(() => setSongs([]))
+        .finally(() => setLoading(false));
+    };
+
+    init();
   }, [navigate, loggedIn]);
 
   const handleCreateClick = () => {

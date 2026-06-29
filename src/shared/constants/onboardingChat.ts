@@ -31,10 +31,14 @@ export const ONBOARDING_QUESTIONS = {
 } as const;
 
 export const VOICE_CONFIRM_CHOICES: ChatChoice[] = [
-  { label: '이 답변이 맞아요.', value: '__confirm__' },
+  { label: '이 답변이 맞아요!', value: '__confirm__' },
   { label: '잘못 입력됐어요.', value: '__retry__' },
 ];
 
+export const GREETING_CHOICES: ChatChoice[] = [
+  { label: '또비 안녕!', value: '또비 안녕' },
+  { label: '안녕 또비~', value: '안녕 또비' },
+];
 
 export const GENRE_EXAMPLES: ChatChoice[] = [
   { label: '발라드', value: '발라드' },
@@ -57,7 +61,7 @@ export const STORY_EXAMPLES: ChatChoice[] = [
 ];
 
 export const STORY_MORE_CHOICES: ChatChoice[] = [
-  { label: '충분합니다.', value: 'enough' },
+  { label: '충분합니다!', value: 'enough' },
   { label: '더 얘기하고 싶어요.', value: 'more' },
   { label: '글로 적고 싶어요.', value: 'text' },
   { label: '사진으로 보낼게요.', value: 'photo' },
@@ -82,8 +86,8 @@ export const VOICE_RECORD_METHOD_CHOICES: ChatChoice[] = [
 ];
 
 export const SUMMARY_CHOICES: ChatChoice[] = [
-  { label: '좋아요', value: 'confirm' },
-  { label: '바꾸고 싶어요', value: 'change' },
+  { label: '좋아요!', value: 'confirm' },
+  { label: '바꾸고 싶어요.', value: 'change' },
 ];
 
 export const GENRE_FALLBACK = ['포크', '발라드', '록', 'K-POP', '힙합', 'R&B', '인디', '어쿠스틱'];
@@ -111,13 +115,13 @@ export function getSubtitleForStep(step: ChatStep): string {
 export function getTtobiGreetingMessage() {
   return `안녕하세요!
 저는 당신의 여정을 함께할
-노래하는 파랑새, "또비"예요!
+노래하는 파랑새, '또비'예요!
 만나서 기뻐요!`;
 }
 
 export function getGreetingMicGuide() {
   return `마이크를 눌러
-'또비 안녕' 이라고 말씀해주세요`;
+'또비 안녕!' 이라고 말씀해주세요.`;
 }
 
 export function getGenreQuestionMessage() {
@@ -126,7 +130,7 @@ export function getGenreQuestionMessage() {
 
 export function getGenreMicGuide() {
   return `마이크를 눌러
-장르 한 단어를 말씀해주세요`;
+장르 한 단어를 말씀해주세요.`;
 }
 
 export function buildFavoriteSongMessage(genre: string) {
@@ -138,7 +142,7 @@ export function buildFavoriteSongMessage(genre: string) {
 
 export function getFavoriteSongMicGuide() {
   return `마이크를 눌러
-가수와 곡명을 말씀해주세요`;
+가수와 곡명을 말씀해주세요.`;
 }
 
 export function buildStory1Message(favoriteSong: string) {
@@ -169,17 +173,17 @@ export function buildStoryMoreMessage(storySnippet: string) {
 }
 
 export function getStoryConfirmMessage() {
-  return `지금 말씀해주신 이야기들로만 노래가 만들어져.`;
+  return `지금 말씀해주신 이야기들로만 노래가 만들어져요.`;
 }
 
 export function buildFinalGenreThinkingMessage(userName: string) {
   return `또비가 생각하는 중 . . .
 
-${userName}님의 이야기를 또비가 잘 들었어요! 고맙습니다!
+${userName}님의 이야기를 또비가 잘 들었어요! 고맙습니다.
 
 당신만을 위한 노래가 만들어진다면 어떤 장르가 좋을까요?
 
-마지막으로 선택해주세요`;
+마지막으로 선택해주세요.`;
 }
 
 export function getCustomGenreChoice(): ChatChoice {
@@ -324,7 +328,7 @@ export function recommendGenres(input: {
 
 export function pickReadSentence(story: string): string {
   const trimmed = story.trim();
-  if (!trimmed) return '오늘도 당신 곁에 있어요';
+  if (!trimmed) return '오늘도 당신 곁에 있어요.';
 
   const sentences = trimmed.split(/[.!?。\n]/).map((s) => s.trim()).filter(Boolean);
   if (sentences.length > 0) {
@@ -380,7 +384,7 @@ export function getExampleHintForStep(
 ): string | null {
   switch (step) {
     case 'greeting':
-      return `예) ${GREETING_CHOICES.map((c) => c.label).join(' · ')}`;
+      return '예) 또비 안녕!';
     case 'genre':
       return `예) ${GENRE_EXAMPLES.map((c) => c.label).join(' · ')}`;
     case 'favoriteSong':
