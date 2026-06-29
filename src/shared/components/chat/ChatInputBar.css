@@ -1,58 +1,33 @@
 .chat-input-bar {
-  width: 100%;
-}
-
-.chat-input-bar__wrap {
-  position: relative;
   display: flex;
   align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(157, 168, 232, 0.35);
+  border-radius: 999px;
 }
 
-.chat-input-bar__field {
-  width: 100%;
-  padding: 14px 52px 14px 18px;
+.chat-input-bar__field--single {
+  flex: 1;
+  padding: 8px 4px;
   font-family: var(--font-body);
   font-size: calc(14px * var(--font-scale));
   color: #2d3142;
-  background: #fff;
+  background: transparent;
   border: none;
-  border-radius: 999px;
   outline: none;
-  box-shadow: 0 2px 16px rgba(45, 49, 66, 0.06);
 }
 
-.chat-input-bar__field::placeholder {
-  color: rgba(45, 49, 66, 0.38);
-}
-
-.chat-input-bar__field:focus {
-  box-shadow: 0 2px 20px rgba(139, 127, 212, 0.15);
-}
-
-.chat-input-bar__send {
-  position: absolute;
-  right: 6px;
-  top: 50%;
-  transform: translateY(-50%);
+.chat-input-bar__submit {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 36px;
   height: 36px;
   color: #fff;
-  background: linear-gradient(135deg, #9aa8e8, #b8c4f0);
+  background: linear-gradient(135deg, #9da8e8 0%, #8b7fd4 100%);
   border: none;
   border-radius: 50%;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(139, 127, 212, 0.3);
-}
-
-.chat-input-bar__send:active {
-  opacity: 0.85;
-  transform: translateY(-50%) scale(0.95);
-}
-
-.chat-input-bar__send-icon {
-  display: block;
-  filter: brightness(0) invert(1);
 }

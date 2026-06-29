@@ -4,20 +4,24 @@ interface VoiceRecorderBarProps {
   status: 'idle' | 'listening' | 'processing';
   disabled?: boolean;
   onToggleRecord: () => void;
+  showMic?: boolean;
 }
 
 export default function VoiceRecorderBar({
   status,
   disabled = false,
   onToggleRecord,
+  showMic = true,
 }: VoiceRecorderBarProps) {
   const isListening = status === 'listening';
   const isBusy = status === 'processing' || disabled;
 
+  if (!showMic) return null;
+
   return (
     <div className="voice-recorder-bar">
       <p className="voice-recorder-bar__hint">
-        {isListening ? '말씀이 끝나면 버튼을 다시 눌러주세요' : '버튼을 눌러 말씀해 주세요'}
+        {isListening ? '말씀이 끝나면 마이크를 다시 눌러주세요' : '마이크를 눌러 말씀해 주세요'}
       </p>
       <button
         type="button"

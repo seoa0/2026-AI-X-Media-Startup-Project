@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type MouseEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { songsApi } from '../../shared/apis/songs/songsApi';
 import PackageCard from '../../shared/components/package/PackageCard';
+import BottomNav from '../../shared/components/nav/BottomNav';
 import { logoImage } from '../../shared/assets';
 import AnimatedGradientBackground from '../../shared/styles/AnimatedGradientBackground/AnimatedGradientBackground';
 import { PACKAGES } from '../../shared/constants/packages';
@@ -20,6 +21,7 @@ import './PackageSelect.css';
 export default function PackageSelect() {
   const navigate = useNavigate();
   const [submitting, setSubmitting] = useState(false);
+  const [bottomNavVisible, setBottomNavVisible] = useState(false);
 
   useEffect(() => {
     if (!isLoggedIn()) {
@@ -32,6 +34,12 @@ export default function PackageSelect() {
     }
     clearOnboardingGenre();
   }, [navigate]);
+
+  const handleBackgroundTap = (e: MouseEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLElement;
+    if (target.closest('.package-card, button, a')) return;
+    setBottomNavVisible((prev) => !prev);
+  };
 
   const handleSelect = async (packageId: string) => {
     if (submitting) return;
@@ -58,18 +66,28 @@ export default function PackageSelect() {
 
   return (
     <AnimatedGradientBackground variant="auth" className="package-select">
-      <header className="package-select__header">
-        <div className="package-select__logo-wrap">
-          <img src={logoImage} alt="나도 가수다" className="package-select__logo" />
-        </div>
-        <p className="package-select__subtitle">원하는 플랜을 선택해주세요</p>
-      </header>
+      <div className="package-select__tap-area" onClick={handleBackgroundTap}>
+        <header className="package-select__header">
+          <div className="package-select__logo-wrap">
+            <img src={logoImage} alt="나도 가수다" className="package-select__logo" />
+          </div>
+          <p className="package-select__subtitle">원하는 플랜을 선택해주세요</p>
+        </header>
 
-      <main className="package-select__list">
-        {PACKAGES.map((pkg) => (
-          <PackageCard key={pkg.id} data={pkg} onClick={() => handleSelect(pkg.id)} />
-        ))}
-      </main>
+        <main className="package-select__list">
+          {PACKAGES.map((pkg) => (
+            <PackageCard key={pkg.id} data={pkg} onClick={() => handleSelect(pkg.id)} />
+          ))}
+        </main>
+      </div>
+
+      <div
+        className={`package-select__nav-overlay${
+          bottomNavVisible ? ' package-select__nav-overlay--visible' : ''
+        }`}
+      >
+        <BottomNav />
+      </div>
     </AnimatedGradientBackground>
   );
 }

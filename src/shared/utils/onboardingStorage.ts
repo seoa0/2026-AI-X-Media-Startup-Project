@@ -4,11 +4,14 @@ export interface OnboardingData {
   complete: boolean;
   introChatComplete: boolean;
   recentSong?: string;
+  listenGenre?: string;
   favoriteSong?: string;
   story?: string;
   songTitle?: string;
   preferredGenre?: string;
   selectedGenre?: string;
+  giftTarget?: string;
+  voiceOwner?: 'self' | 'other';
   selectedPackageId?: string;
 }
 
@@ -54,6 +57,11 @@ export function completeOnboarding() {
 
 export function resetOnboarding() {
   localStorage.removeItem(STORAGE_KEY);
+}
+
+/** 온보딩 대화 전체를 처음부터 다시 시작 */
+export function restartOnboardingChat() {
+  resetOnboarding();
 }
 
 export function getPostLoginPath() {

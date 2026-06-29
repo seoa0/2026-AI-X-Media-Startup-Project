@@ -6,6 +6,7 @@ import CharacterChatLayout from '../../shared/components/chat/CharacterChatLayou
 import VoiceConversationPanel from '../../shared/components/chat/VoiceConversationPanel';
 import VoiceRecorderBar from '../../shared/components/chat/VoiceRecorderBar';
 import BottomNav from '../../shared/components/nav/BottomNav';
+import { ASSISTANT_NAME } from '../../shared/constants/onboardingChat';
 import { getPackageById } from '../../shared/constants/packages';
 import {
   CREATE_WRAPUP_DONE,
@@ -191,7 +192,11 @@ export default function Create() {
             </Button>
           </div>
         ) : (
-          <VoiceRecorderBar status={status} disabled={loading} onToggleRecord={handleToggleRecord} />
+          <VoiceRecorderBar
+            status={status}
+            disabled={loading}
+            onToggleRecord={handleToggleRecord}
+          />
         )
       }
       showBottomNav
@@ -201,6 +206,7 @@ export default function Create() {
         messages={messages}
         status={status}
         liveTranscript={liveTranscript}
+        assistantName={ASSISTANT_NAME}
         inlineAction={
           readyForLyrics ? (
             <Button variant="primary" layout="full" onClick={goToLyrics}>

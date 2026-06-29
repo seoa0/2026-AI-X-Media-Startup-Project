@@ -5,6 +5,7 @@ import CharacterChatLayout from '../../shared/components/chat/CharacterChatLayou
 import VoiceConversationPanel from '../../shared/components/chat/VoiceConversationPanel';
 import VoiceRecorderBar from '../../shared/components/chat/VoiceRecorderBar';
 import BottomNav from '../../shared/components/nav/BottomNav';
+import { ASSISTANT_NAME } from '../../shared/constants/onboardingChat';
 import { getPackageById } from '../../shared/constants/packages';
 import {
   generateLyricsAssistantReply,
@@ -169,7 +170,13 @@ export default function Lyrics() {
       title={song.title}
       subtitle={subtitle}
       onBack={() => navigate('/home')}
-      footer={<VoiceRecorderBar status={status} disabled={loading} onToggleRecord={handleToggleRecord} />}
+      footer={
+        <VoiceRecorderBar
+          status={status}
+          disabled={loading}
+          onToggleRecord={handleToggleRecord}
+        />
+      }
       showBottomNav
       bottomNav={<BottomNav />}
     >
@@ -177,6 +184,7 @@ export default function Lyrics() {
         messages={messages}
         status={status}
         liveTranscript={liveTranscript}
+        assistantName={ASSISTANT_NAME}
         defaultBotText="가사에 담고 싶은 내용을 말씀해 주세요."
       />
     </CharacterChatLayout>

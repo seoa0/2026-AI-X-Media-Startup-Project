@@ -1,5 +1,4 @@
 import type { FormEvent } from 'react';
-import { messageSendIcon } from '../../assets/icons';
 import './ChatInputBar.css';
 
 interface ChatInputBarProps {
@@ -17,18 +16,24 @@ export default function ChatInputBar({
 }: ChatInputBarProps) {
   return (
     <form className="chat-input-bar" onSubmit={onSubmit}>
-      <div className="chat-input-bar__wrap">
-        <input
-          type="text"
-          className="chat-input-bar__field"
-          placeholder={placeholder}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-        />
-        <button type="submit" className="chat-input-bar__send" aria-label="전송">
-          <img src={messageSendIcon} alt="" className="chat-input-bar__send-icon" width={18} height={18} />
-        </button>
-      </div>
+      <input
+        type="text"
+        className="chat-input-bar__field chat-input-bar__field--single"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+      />
+      <button type="submit" className="chat-input-bar__submit" aria-label="보내기">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path
+            d="M5 12h14M13 6l6 6-6 6"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </button>
     </form>
   );
 }

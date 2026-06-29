@@ -13,7 +13,14 @@ const NAV_ITEMS: { id: NavItem; label: string; path: string; icon: string }[] = 
 ];
 
 function getActiveItem(pathname: string): NavItem {
-  if (pathname.startsWith('/create')) return 'create';
+  if (
+    pathname.startsWith('/create') ||
+    pathname.startsWith('/packages') ||
+    pathname.startsWith('/lyrics') ||
+    pathname.startsWith('/onboarding/chat')
+  ) {
+    return 'create';
+  }
   if (pathname.startsWith('/my')) return 'my';
   return 'home';
 }

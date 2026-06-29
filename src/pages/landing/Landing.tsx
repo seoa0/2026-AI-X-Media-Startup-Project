@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import Button from '../../shared/components/button/Button';
 import AnimatedGradientBackground from '../../shared/styles/AnimatedGradientBackground/AnimatedGradientBackground';
+import { logoImage } from '../../shared/assets';
 import './Landing.css';
 
 export default function Landing() {
@@ -9,6 +10,13 @@ export default function Landing() {
   return (
     <AnimatedGradientBackground variant="landing" className="landing">
       <div className="landing__content">
+        <div className="landing__hero">
+          <img src={logoImage} alt="나도 가수다" className="landing__logo" />
+          <p className="landing__tagline-line">세상에 하나뿐인,</p>
+          <p className="landing__tagline-line">당신만을 위한 노래 제작기</p>
+          <p className="landing__brand">나도 가수다</p>
+        </div>
+
         <div className="landing__promo">
           <p className="landing__promo-line">지금 가입하시면</p>
           <p className="landing__promo-line">첫 곡 제작비를</p>

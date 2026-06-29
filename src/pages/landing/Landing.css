@@ -9,6 +9,35 @@
   overflow-x: hidden;
 }
 
+.landing__hero {
+  margin-bottom: 28px;
+}
+
+.landing__logo {
+  width: 72px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.landing__tagline-line {
+  margin: 0;
+  font-family: var(--font-title);
+  font-size: calc(24px * var(--font-scale));
+  font-weight: 700;
+  line-height: 1.45;
+  color: #2d3142;
+  letter-spacing: -0.02em;
+}
+
+.landing__brand {
+  margin: 12px 0 0;
+  font-family: var(--font-title);
+  font-size: calc(18px * var(--font-scale));
+  font-weight: 700;
+  color: #9da8e8;
+  letter-spacing: -0.01em;
+}
+
 .landing__promo {
   margin-bottom: 20px;
 }
