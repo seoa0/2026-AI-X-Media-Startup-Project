@@ -1,0 +1,16 @@
+export const colors = {
+  textPrimary: '#2D3142',
+  textSecondary: '#9B93AB',
+  textMuted: '#B8AED0',
+  accentPurple: '#8B9FD4',
+  accentHighlight: '#9DA8E8',
+  accentBlue: '#6B7FD7',
+  domainSelectedBg: '#E8E0F5',
+  buttonGradientStart: '#8B7FD4',
+  buttonGradientEnd: '#A8B8E8',
+  loginButtonBg: '#EEF4F3',
+  inputLine: '#D4CCE8',
+  signupButton: '#A8C5E8',
+  footerText: '#A0A0A0',
+  linkBlue: '#7B9FD4',
+} as const;

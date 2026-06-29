@@ -1,0 +1,53 @@
+.login__content {
+  min-height: 100dvh;
+  max-width: 430px;
+  margin: 0 auto;
+  padding: 20px 28px 100px;
+}
+
+.login__form {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+.login__error {
+  margin: -16px 0 0;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: #e53935;
+  text-align: center;
+}
+
+.underline-input {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.underline-input__label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #B8AED0;
+}
+
+.underline-input__field {
+  width: 100%;
+  padding: 4px 0;
+  font-family: 'Line Seed KR', sans-serif;
+  font-size: 16px;
+  color: #2D3142;
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+.underline-input__field::placeholder {
+  color: #B8AED0;
+  font-size: 15px;
+}
+
+.underline-input__line {
+  height: 1px;
+  background: #D4CCE8;
+}

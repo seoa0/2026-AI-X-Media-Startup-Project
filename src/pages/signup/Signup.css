@@ -1,0 +1,193 @@
+.signup__content {
+  min-height: 100dvh;
+  max-width: 430px;
+  margin: 0 auto;
+  padding: 20px 28px 100px;
+}
+
+.signup__form {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+.signup__error {
+  margin: -16px 0 0;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: #e53935;
+  text-align: center;
+}
+
+.email-input {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.email-input__labels {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.email-input__label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #B8AED0;
+}
+
+.email-input__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.email-input__local {
+  flex: 1;
+  min-width: 0;
+  padding: 4px 0;
+  font-family: 'Line Seed KR', sans-serif;
+  font-size: 16px;
+  color: #2D3142;
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+.email-input__domain-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.email-input__at,
+.email-input__domain {
+  font-size: 16px;
+  color: #2D3142;
+}
+
+.email-input__chevron {
+  margin-left: 2px;
+}
+
+.email-input__line,
+.underline-input__line {
+  height: 1px;
+  background: #D4CCE8;
+}
+
+.underline-input {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.underline-input__label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #B8AED0;
+}
+
+.underline-input__field {
+  width: 100%;
+  padding: 4px 0;
+  font-family: 'Line Seed KR', sans-serif;
+  font-size: 16px;
+  color: #2D3142;
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+.underline-input__field::placeholder {
+  color: #B8AED0;
+  font-size: 15px;
+}
+
+.underline-input__hint {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: #B8AED0;
+}
+
+.domain-sheet-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(2px);
+}
+
+.domain-sheet {
+  width: 100%;
+  max-width: 430px;
+  padding: 0 16px 32px;
+  animation: slideUp 0.25s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.domain-sheet__list {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.domain-sheet__item {
+  display: block;
+  width: 100%;
+  padding: 18px 20px;
+  font-family: 'Line Seed KR', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #2D3142;
+  text-align: center;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+}
+
+.domain-sheet__item:last-of-type {
+  border-bottom: none;
+}
+
+.domain-sheet__item--selected {
+  background: #E8E0F5;
+  color: #6B7FD7;
+  font-weight: 700;
+}
+
+.domain-sheet__custom-input {
+  display: block;
+  width: calc(100% - 40px);
+  margin: 16px auto 20px;
+  padding: 12px 14px;
+  font-family: 'Line Seed KR', sans-serif;
+  font-size: 15px;
+  color: #2D3142;
+  background: #F5F3FA;
+  border: 1px solid #D4CCE8;
+  border-radius: 8px;
+  outline: none;
+}

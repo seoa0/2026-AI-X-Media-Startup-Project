@@ -1,0 +1,26 @@
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 0 32px;
+}
+
+.page-header__back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  background: none;
+  border: none;
+  color: #2D3142;
+  cursor: pointer;
+}
+
+.page-header__title {
+  margin: 0;
+  font-family: var(--font-title);
+  font-size: 22px;
+  font-weight: 700;
+  color: #2D3142;
+  letter-spacing: -0.02em;
+}

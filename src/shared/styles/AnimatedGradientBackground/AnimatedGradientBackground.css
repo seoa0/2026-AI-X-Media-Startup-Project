@@ -1,0 +1,151 @@
+.animated-gradient {
+  position: relative;
+  min-height: 100dvh;
+  overflow: hidden;
+}
+
+.animated-gradient__canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: #F2ECF4;
+  pointer-events: none;
+}
+
+.animated-gradient--auth .animated-gradient__canvas {
+  background: #F5ECF0;
+}
+
+.animated-gradient__orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  will-change: transform;
+  opacity: 0.85;
+}
+
+/* landing */
+.animated-gradient--landing .animated-gradient__orb--1 {
+  width: 80vmax;
+  height: 80vmax;
+  background: #DDD4F0;
+  top: -25%;
+  left: -20%;
+  animation: orbMove1 14s ease-in-out infinite;
+}
+
+.animated-gradient--landing .animated-gradient__orb--2 {
+  width: 75vmax;
+  height: 75vmax;
+  background: #F5DDE2;
+  top: 10%;
+  right: -30%;
+  animation: orbMove2 16s ease-in-out infinite;
+}
+
+.animated-gradient--landing .animated-gradient__orb--3 {
+  width: 70vmax;
+  height: 70vmax;
+  background: #F5EDD0;
+  bottom: -20%;
+  left: 10%;
+  animation: orbMove3 18s ease-in-out infinite;
+}
+
+.animated-gradient--landing .animated-gradient__orb--4 {
+  width: 65vmax;
+  height: 65vmax;
+  background: #D4EDE0;
+  bottom: 5%;
+  right: -15%;
+  animation: orbMove4 20s ease-in-out infinite;
+}
+
+/* auth */
+.animated-gradient--auth .animated-gradient__orb--1 {
+  width: 80vmax;
+  height: 80vmax;
+  background: #F0D4E4;
+  top: -20%;
+  left: -25%;
+  animation: orbMove1 14s ease-in-out infinite;
+}
+
+.animated-gradient--auth .animated-gradient__orb--2 {
+  width: 75vmax;
+  height: 75vmax;
+  background: #E4D4F0;
+  top: 15%;
+  right: -25%;
+  animation: orbMove2 16s ease-in-out infinite;
+}
+
+.animated-gradient--auth .animated-gradient__orb--3 {
+  width: 70vmax;
+  height: 70vmax;
+  background: #D4E0F5;
+  bottom: -15%;
+  left: 5%;
+  animation: orbMove3 18s ease-in-out infinite;
+}
+
+.animated-gradient--auth .animated-gradient__orb--4 {
+  width: 65vmax;
+  height: 65vmax;
+  background: #EDD4F0;
+  bottom: 0;
+  right: -10%;
+  animation: orbMove4 20s ease-in-out infinite;
+}
+
+.animated-gradient__content {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes orbMove1 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(12%, 10%) scale(1.08);
+  }
+}
+
+@keyframes orbMove2 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-10%, 8%) scale(1.05);
+  }
+}
+
+@keyframes orbMove3 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(8%, -12%) scale(1.1);
+  }
+}
+
+@keyframes orbMove4 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-8%, -6%) scale(0.95);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animated-gradient__orb {
+    animation: none;
+  }
+}

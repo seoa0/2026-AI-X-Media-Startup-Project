@@ -1,0 +1,30 @@
+.segment-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+}
+
+.segment-toggle__item {
+  padding: 8px 20px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.55);
+  background: transparent;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 0.2s, background 0.2s;
+}
+
+.segment-toggle__item--active {
+  color: #000;
+  background: #fff;
+}
+
+.segment-toggle__item:active {
+  opacity: 0.85;
+}

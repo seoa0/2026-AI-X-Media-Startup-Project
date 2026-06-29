@@ -1,0 +1,5 @@
+server/
+.git/
+agent-transcripts/
+*.md
+!README.md

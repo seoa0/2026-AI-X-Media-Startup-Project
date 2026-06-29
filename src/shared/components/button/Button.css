@@ -1,0 +1,115 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 18px 16px;
+  font-family: 'Line Seed KR', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  border: 3px solid transparent;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: opacity 0.15s, border-color 0.15s;
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+.btn:active {
+  opacity: 0.85;
+}
+
+.btn--primary {
+  color: #fff;
+  background:
+    linear-gradient(85deg, #8B7FD4 0%, #A8B8E8 100%) padding-box,
+    linear-gradient(100deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.3) 100%) border-box;
+}
+
+.btn--white {
+  color: #2D3142;
+  background:
+    #fff padding-box,
+    linear-gradient(100deg, rgba(250, 250, 250, 0.3) 0%, rgba(255, 255, 255, 0.1) 50%, rgba(253, 253, 253, 0.3) 100%) border-box;
+}
+
+.btn--ghost {
+  color: #fff;
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+.btn--ghost:active {
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.btn--glass {
+  position: relative;
+  overflow: hidden;
+  color: #2d3142;
+  background: rgba(255, 255, 255, 0.38);
+  background-clip: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow:
+    0 8px 28px rgba(139, 127, 212, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.25);
+  transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+}
+
+.btn--glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(255, 255, 255, 0.05) 45%,
+    rgba(168, 184, 232, 0.18) 100%
+  );
+  pointer-events: none;
+}
+
+.btn--glass:active {
+  transform: scale(0.98);
+  background: rgba(255, 255, 255, 0.48);
+  box-shadow:
+    0 4px 16px rgba(139, 127, 212, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+.btn__arrow {
+  flex-shrink: 0;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.btn--inline {
+  flex: 1;
+}
+
+.btn--full {
+  width: 100%;
+}
+
+.btn--fixed {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  padding: 20px;
+  border-radius: 20px 20px 0 0;
+}
+
+@media (min-width: 431px) {
+  .btn--fixed {
+    border-radius: 20px;
+    bottom: 24px;
+    width: calc(100% - 56px);
+    max-width: 374px;
+  }
+}

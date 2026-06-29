@@ -1,0 +1,53 @@
+.landing__content {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  width: 100%;
+  max-width: 430px;
+  margin: 0 auto;
+  padding: 60px 28px 40px;
+  overflow-x: hidden;
+}
+
+.landing__promo {
+  margin-bottom: 20px;
+}
+
+.landing__promo-line {
+  margin: 0;
+  font-family: var(--font-title);
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.45;
+  color: #2D3142;
+  letter-spacing: -0.02em;
+}
+
+.landing__promo-highlight {
+  color: #9DA8E8;
+}
+
+.landing__actions {
+  display: flex;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 24px;
+}
+
+.landing__terms {
+  margin: 20px 0 0;
+  font-size: 11px;
+  font-weight: 400;
+  color: #A0A0A0;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.landing__terms-link {
+  color: #7B9FD4;
+  text-decoration: none;
+}
+
+.landing__terms-link:hover {
+  text-decoration: underline;
+}
