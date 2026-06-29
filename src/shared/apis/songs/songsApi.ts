@@ -1,5 +1,6 @@
 import {
   firebaseCreateSong,
+  firebaseDeleteSong,
   firebaseGetSong,
   firebaseListSongs,
   firebaseUpdateSong,
@@ -22,4 +23,9 @@ export const songsApi = {
   update: async (id: string, data: UpdateSongRequest) => ({
     data: { song: await firebaseUpdateSong(id, data) },
   }),
+
+  delete: async (id: string) => {
+    await firebaseDeleteSong(id);
+    return { data: { ok: true as const } };
+  },
 };

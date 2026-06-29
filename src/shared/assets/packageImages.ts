@@ -1,9 +1,9 @@
-const packageImageModules = import.meta.glob<string>('./images/packages/*.png', {
+const packageImageModules = import.meta.glob<string>('./images/packages/package_*.png', {
   eager: true,
   import: 'default',
 });
 
-/** 패키지 id와 동일한 파일명으로 images/packages/{id}.png 추가 */
+/** images/packages/package_{id}.png (예: package_cheap.png) */
 export function getPackageImage(packageId: string): string | undefined {
-  return packageImageModules[`./images/packages/${packageId}.png`];
+  return packageImageModules[`./images/packages/package_${packageId}.png`];
 }

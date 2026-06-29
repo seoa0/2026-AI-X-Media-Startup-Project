@@ -3,12 +3,16 @@ export interface ChatMessage {
   role: 'bot' | 'user';
   text: string;
   time: string;
+  source?: 'text' | 'voice';
+  audioUrl?: string;
 }
 
 export interface ChatChoice {
   label: string;
   value: string;
 }
+
+export type VoiceSessionStatus = 'idle' | 'listening' | 'processing';
 
 export function createChatId() {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;

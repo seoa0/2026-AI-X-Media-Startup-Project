@@ -21,13 +21,49 @@
   text-align: center;
 }
 
-/* ── Hero (black header) ── */
+/* ── Hero (gradient header) ── */
 .my__hero {
-  background: #0a0a0a;
+  position: relative;
+  overflow: hidden;
   padding: 48px 24px 40px;
+  background: linear-gradient(
+    165deg,
+    #f0d4e4 0%,
+    #e4d4f0 32%,
+    #eef3fb 68%,
+    #ede8f8 100%
+  );
+}
+
+.my__hero::before,
+.my__hero::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(72px);
+  pointer-events: none;
+  opacity: 0.75;
+}
+
+.my__hero::before {
+  width: 220px;
+  height: 220px;
+  top: -60px;
+  right: -40px;
+  background: #f5dde2;
+}
+
+.my__hero::after {
+  width: 200px;
+  height: 200px;
+  bottom: -50px;
+  left: -30px;
+  background: #d4e0f5;
 }
 
 .my__auth-link {
+  position: relative;
+  z-index: 1;
   display: block;
   width: fit-content;
   margin: 0;
@@ -35,11 +71,11 @@
   font-family: var(--font-title);
   font-size: 36px;
   font-weight: 700;
-  color: #fff;
+  color: #2d3142;
   letter-spacing: -0.03em;
   background: none;
   border: none;
-  border-bottom: 3px solid #fff;
+  border-bottom: 3px solid #2d3142;
   cursor: pointer;
   text-align: left;
 }
@@ -53,11 +89,13 @@
 }
 
 .my__user-name {
+  position: relative;
+  z-index: 1;
   margin: 0;
   font-family: var(--font-title);
   font-size: 36px;
   font-weight: 700;
-  color: #fff;
+  color: #2d3142;
   letter-spacing: -0.03em;
 }
 

@@ -6,6 +6,7 @@ import Signup from '../../pages/signup/Signup';
 import ChatOnboarding from '../../pages/onboarding/ChatOnboarding';
 import PackageSelect from '../../pages/packages/PackageSelect';
 import Create from '../../pages/create/Create';
+import ProductionList from '../../pages/production/ProductionList';
 import My from '../../pages/my/My';
 
 export default function Router() {
@@ -19,6 +20,7 @@ export default function Router() {
       <Route path="/packages" element={<PackageSelect />} />
       <Route path="/create/:songId" element={<Create />} />
       <Route path="/create" element={<Navigate to="/home" replace />} />
+      <Route path="/production" element={<ProductionList />} />
       <Route path="/my" element={<My />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

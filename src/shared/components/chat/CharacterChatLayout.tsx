@@ -16,7 +16,7 @@ interface CharacterChatLayoutProps {
 export default function CharacterChatLayout({
   className = '',
   title = '나만의 노래 제작',
-  subtitle = '0. 프롤로그',
+  subtitle = '프롤로그',
   onBack,
   children,
   footer,
@@ -47,7 +47,7 @@ export default function CharacterChatLayout({
             <h1 className="character-chat__title">{title}</h1>
             <p className="character-chat__subtitle">{subtitle}</p>
           </div>
-          <img src={logoImage} alt="나는 가수다" className="character-chat__logo" />
+          <img src={logoImage} alt="나도 가수다" className="character-chat__logo" />
         </div>
       </header>
 

@@ -49,7 +49,7 @@ function formatStreaming(count: number) {
 function MyFooter() {
   return (
     <footer className="my__footer">
-      <img src={logoImage} alt="나는 가수다" className="my__footer-logo" />
+      <img src={logoImage} alt="나도 가수다" className="my__footer-logo" />
       <p className="my__footer-meta">v1.0.0 · © 2026 NadoGasuda Inc.</p>
     </footer>
   );
@@ -119,7 +119,7 @@ function MyMemberView({ user, inProgressCount, onLogout }: MyMemberViewProps) {
           <h2 className="my__menu-heading">나의 음악 정보</h2>
           <p className="my__menu-sub">제작·발매·수익 한 눈에</p>
           <div className="my__menu-list">
-            <MenuItem label="제작 진행 현황" onClick={() => navigate('/home')} />
+            <MenuItem label="제작 진행 현황" onClick={() => navigate('/production')} />
             <MenuItem label="발매 음원 관리" onClick={() => navigate('/home')} />
             <MenuItem label="수익 정산" onClick={() => navigate('/home')} />
             <MenuItem label="제작 문의하기" onClick={() => navigate('/home')} />

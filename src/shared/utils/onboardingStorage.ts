@@ -6,6 +6,7 @@ export interface OnboardingData {
   recentSong?: string;
   favoriteSong?: string;
   story?: string;
+  songTitle?: string;
   preferredGenre?: string;
   selectedGenre?: string;
   selectedPackageId?: string;
@@ -26,6 +27,13 @@ export function getOnboardingData(): OnboardingData {
 export function saveOnboardingData(partial: Partial<OnboardingData>) {
   const current = getOnboardingData();
   localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...current, ...partial }));
+}
+
+/** 예전 세션 장르가 새 제작에 섞이지 않도록 제거 */
+export function clearOnboardingGenre() {
+  const current = getOnboardingData();
+  const { selectedGenre: _selected, preferredGenre: _preferred, ...rest } = current;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(rest));
 }
 
 export function isOnboardingComplete() {

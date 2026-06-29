@@ -6,7 +6,7 @@ import { isFirebaseConfigured } from '../../shared/firebase/config';
 import { getFirebaseErrorMessage } from '../../shared/firebase/errors';
 import AnimatedGradientBackground from '../../shared/styles/AnimatedGradientBackground/AnimatedGradientBackground';
 import PageHeader from '../../shared/components/header/PageHeader';
-import { getPostLoginPath } from '../../shared/utils/onboardingStorage';
+import { clearOnboardingGenre, getPostLoginPath } from '../../shared/utils/onboardingStorage';
 import { applyServerOnboarding } from '../../shared/utils/syncOnboarding';
 import './Login.css';
 
@@ -31,6 +31,7 @@ export default function Login() {
     try {
       const { data } = await authApi.login({ email, password });
       applyServerOnboarding(data.user.onboarding);
+      clearOnboardingGenre();
       setLoading(false);
       navigate(getPostLoginPath());
     } catch (err) {

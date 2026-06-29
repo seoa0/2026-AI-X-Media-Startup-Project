@@ -1,0 +1,119 @@
+.production-list {
+  min-height: 100dvh;
+  max-width: 430px;
+  margin: 0 auto;
+  color: #2d3142;
+}
+
+.production-list__main {
+  padding: 8px 20px 40px;
+}
+
+.production-list__items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.production-list__card {
+  padding: 16px 18px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 14px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 16px rgba(45, 49, 66, 0.06);
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.production-list__card:active {
+  transform: scale(0.98);
+}
+
+.production-list__card-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.production-list__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.production-list__delete {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: rgba(45, 49, 66, 0.4);
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+
+.production-list__delete svg {
+  width: 20px;
+  height: 20px;
+}
+
+.production-list__delete:hover {
+  color: #e05a5a;
+  background: rgba(224, 90, 90, 0.1);
+}
+
+.production-list__delete:active {
+  color: #c94a4a;
+  background: rgba(224, 90, 90, 0.16);
+}
+
+.production-list__title {
+  margin: 0 0 4px;
+  font-family: var(--font-title);
+  font-size: 15px;
+  font-weight: 700;
+  color: #2d3142;
+}
+
+.production-list__meta {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: rgba(45, 49, 66, 0.55);
+}
+
+.production-list__progress {
+  height: 4px;
+  margin-bottom: 6px;
+  background: rgba(45, 49, 66, 0.1);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.production-list__progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #8b7fd4, #a8b8e8);
+  border-radius: 999px;
+  transition: width 0.3s;
+}
+
+.production-list__percent {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: rgba(45, 49, 66, 0.45);
+}
+
+.production-list__empty {
+  margin: 0;
+  padding: 48px 0;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: rgba(45, 49, 66, 0.45);
+  text-align: center;
+}

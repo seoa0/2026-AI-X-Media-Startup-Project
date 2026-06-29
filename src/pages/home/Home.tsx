@@ -52,7 +52,7 @@ export default function Home() {
     <AnimatedGradientBackground variant="auth" className="home">
       <div className="home__content">
         <div className="home__logo-wrap">
-          <img src={logoImage} alt="나는 가수다" className="home__logo" />
+          <img src={logoImage} alt="나도 가수다" className="home__logo" />
         </div>
 
         <BannerCarousel />
@@ -89,9 +89,7 @@ export default function Home() {
                   >
                     <div className="home__song-info">
                       <h3 className="home__song-title">{song.title}</h3>
-                    <p className="home__song-meta">
-                      {song.style ?? song.genre ?? '장르 미정'} · {song.step}
-                    </p>
+                      <p className="home__song-meta">{song.step}</p>
                     </div>
                     <div className="home__song-progress">
                       <div

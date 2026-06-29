@@ -1,6 +1,7 @@
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -24,7 +25,7 @@ import { withTimeout } from './withTimeout';
 const FIRESTORE_TIMEOUT_MS = 8000;
 
 const PRODUCTION_START_MESSAGE =
-  '좋아! 이제 본격적으로 곡을 만들어볼까?\n어떤 느낌의 곡을 원해? 자유롭게 말해줘!';
+  '좋습니다! 이제 본격적으로 곡을 만들어 보겠습니다.\n어떤 느낌의 곡을 원하시나요? 자유롭게 말씀해 주세요!';
 
 function createInitialMessages(packageId?: string): ChatMessage[] {
   const pkg = packageId ? getPackageById(packageId) : null;
@@ -32,7 +33,7 @@ function createInitialMessages(packageId?: string): ChatMessage[] {
   const time = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
 
   const text = pkg
-    ? `${pkg.title} 패키지로 시작할게!\n${PRODUCTION_START_MESSAGE}`
+    ? `${pkg.title} 패키지로 시작하겠습니다!\n${PRODUCTION_START_MESSAGE}`
     : PRODUCTION_START_MESSAGE;
 
   return [{ id: crypto.randomUUID(), role: 'bot', text, time }];
@@ -155,4 +156,16 @@ export async function firebaseUpdateSong(id: string, data: UpdateSongRequest) {
 
   await withTimeout(updateDoc(ref, patch), FIRESTORE_TIMEOUT_MS);
   return toSong(id, { ...current, ...patch });
+}
+
+export async function firebaseDeleteSong(id: string) {
+  const uid = requireUid();
+  const ref = doc(db, 'songs', id);
+  const snap = await withTimeout(getDoc(ref), FIRESTORE_TIMEOUT_MS);
+
+  if (!snap.exists() || snap.data().userId !== uid) {
+    throw new Error('not-found');
+  }
+
+  await withTimeout(deleteDoc(ref), FIRESTORE_TIMEOUT_MS);
 }
