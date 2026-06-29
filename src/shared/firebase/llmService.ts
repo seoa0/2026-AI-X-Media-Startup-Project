@@ -39,7 +39,12 @@ export const CREATE_WRAPUP_QUESTION =
   '감사합니다! 말씀해 주신 내용을 잘 정리해 두었어요. 더 추가하고 싶은 부분이 있으신가요?';
 
 export const CREATE_WRAPUP_DONE =
-  '알겠습니다! 말씀해 주신 내용을 모두 반영하겠습니다. 이제 플랜 선택으로 넘어가 볼게요!';
+  '알겠습니다! 말씀해 주신 내용을 모두 반영하겠습니다. 이제 가사 생성으로 넘어가 볼게요!';
+
+export const LYRICS_START_MESSAGE =
+  '가사 작성 단계예요!\n지금까지 이야기해 주신 내용을 바탕으로 가사를 만들어 볼게요. 노래에 담고 싶은 가사나 표현을 자유롭게 말씀해 주세요!';
+
+export const LYRICS_PHASE_MARKER = '가사 작성 단계';
 
 const WRAPUP_MARKER = '더 추가하고 싶은 부분';
 
@@ -154,6 +159,51 @@ export async function generateMusicAssistantReply(
 
     const systemInstruction = `당신은 '나도 가수다' AI 뮤직 메이트입니다. 존댓말. 2~3문장. 이모지 최대 1개.\n${contextLines}`;
 
+    const text = await callGeminiChat(messages, systemInstruction, lastUser.text);
+    if (text) return text;
+  } catch (error) {
+    markLlmUnavailable(error);
+  }
+
+  return local;
+}
+
+function countLyricsUserTurns(messages: ChatMessage[]) {
+  const lyricsStartIndex = messages.findIndex(
+    (m) => m.role === 'bot' && m.text.includes(LYRICS_PHASE_MARKER),
+  );
+  const lyricsMessages = lyricsStartIndex >= 0 ? messages.slice(lyricsStartIndex + 1) : messages;
+  return lyricsMessages.filter((m) => m.role === 'user').length;
+}
+
+function buildLocalLyricsReply(userText: string, userTurnCount: number): string {
+  const snippet = truncate(userText);
+
+  if (userTurnCount <= 1) {
+    return `«${snippet}» 좋은 표현이에요! 이어서 넣고 싶은 구절이나 후렴이 있으신가요?`;
+  }
+  if (userTurnCount === 2) {
+    return `멋져요! ${snippet}을 살려 가사 초안을 만들어 보겠습니다. 더 담고 싶은 내용이 있으신가요?`;
+  }
+  return '감사합니다! 말씀해 주신 내용으로 가사를 구성해 볼게요. 잠시만 기다려 주세요.';
+}
+
+export async function generateLyricsAssistantReply(messages: ChatMessage[]): Promise<string> {
+  const lastUser = [...messages].reverse().find((m) => m.role === 'user');
+  if (!lastUser?.text.trim()) {
+    return '말씀을 잘 못 들었습니다. 다시 한번 말씀해 주시겠어요?';
+  }
+
+  const userTurnCount = countLyricsUserTurns(messages);
+  const local = buildLocalLyricsReply(lastUser.text, userTurnCount);
+
+  if (!LLM_ENABLED || llmDisabledForSession) {
+    return local;
+  }
+
+  try {
+    const systemInstruction =
+      "당신은 '나도 가수다' AI 뮤직 메이트입니다. 가사 작성 단계입니다. 존댓말. 2~3문장. 이모지 최대 1개.";
     const text = await callGeminiChat(messages, systemInstruction, lastUser.text);
     if (text) return text;
   } catch (error) {

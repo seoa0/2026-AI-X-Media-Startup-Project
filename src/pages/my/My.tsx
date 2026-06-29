@@ -76,6 +76,7 @@ function MyGuestView() {
           <h2 className="my__menu-heading">설정</h2>
           <div className="my__menu-list">
             <MenuItem label="프로필 수정" onClick={requireLogin} />
+            <MenuItem label="폰트 크기" onClick={requireLogin} />
             <MenuItem label="결제 내역" onClick={requireLogin} />
             <MenuItem label="고객 지원" onClick={requireLogin} />
           </div>
@@ -130,6 +131,7 @@ function MyMemberView({ user, inProgressCount, onLogout }: MyMemberViewProps) {
           <h2 className="my__menu-heading">설정</h2>
           <div className="my__menu-list">
             <MenuItem label="프로필 수정" onClick={() => navigate('/home')} />
+            <MenuItem label="폰트 크기" onClick={() => navigate('/settings/font-size')} />
             <MenuItem label="결제 내역" onClick={() => navigate('/home')} />
             <MenuItem label="고객 지원" onClick={() => navigate('/home')} />
             <MenuItem label="로그아웃" onClick={onLogout} variant="danger" />

@@ -9,7 +9,7 @@
 .voice-recorder-bar__hint {
   margin: 0;
   font-family: var(--font-body);
-  font-size: 12px;
+  font-size: calc(12px * var(--font-scale));
   color: rgba(45, 49, 66, 0.5);
 }
 

@@ -14,7 +14,7 @@
 .signup__error {
   margin: -16px 0 0;
   font-family: var(--font-body);
-  font-size: 13px;
+  font-size: calc(13px * var(--font-scale));
   color: #e53935;
   text-align: center;
 }
@@ -32,7 +32,7 @@
 }
 
 .email-input__label {
-  font-size: 13px;
+  font-size: calc(13px * var(--font-scale));
   font-weight: 700;
   color: #B8AED0;
 }
@@ -49,7 +49,7 @@
   min-width: 0;
   padding: 4px 0;
   font-family: 'Line Seed KR', sans-serif;
-  font-size: 16px;
+  font-size: calc(16px * var(--font-scale));
   color: #2D3142;
   background: transparent;
   border: none;
@@ -69,7 +69,7 @@
 
 .email-input__at,
 .email-input__domain {
-  font-size: 16px;
+  font-size: calc(16px * var(--font-scale));
   color: #2D3142;
 }
 
@@ -90,7 +90,7 @@
 }
 
 .underline-input__label {
-  font-size: 13px;
+  font-size: calc(13px * var(--font-scale));
   font-weight: 700;
   color: #B8AED0;
 }
@@ -99,7 +99,7 @@
   width: 100%;
   padding: 4px 0;
   font-family: 'Line Seed KR', sans-serif;
-  font-size: 16px;
+  font-size: calc(16px * var(--font-scale));
   color: #2D3142;
   background: transparent;
   border: none;
@@ -108,12 +108,12 @@
 
 .underline-input__field::placeholder {
   color: #B8AED0;
-  font-size: 15px;
+  font-size: calc(15px * var(--font-scale));
 }
 
 .underline-input__hint {
   margin: 4px 0 0;
-  font-size: 12px;
+  font-size: calc(12px * var(--font-scale));
   color: #B8AED0;
 }
 
@@ -158,7 +158,7 @@
   width: 100%;
   padding: 18px 20px;
   font-family: 'Line Seed KR', sans-serif;
-  font-size: 16px;
+  font-size: calc(16px * var(--font-scale));
   font-weight: 400;
   color: #2D3142;
   text-align: center;
@@ -184,7 +184,7 @@
   margin: 16px auto 20px;
   padding: 12px 14px;
   font-family: 'Line Seed KR', sans-serif;
-  font-size: 15px;
+  font-size: calc(15px * var(--font-scale));
   color: #2D3142;
   background: #F5F3FA;
   border: 1px solid #D4CCE8;

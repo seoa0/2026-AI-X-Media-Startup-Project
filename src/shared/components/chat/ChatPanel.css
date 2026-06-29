@@ -33,7 +33,7 @@
 .chat-panel__bubble {
   padding: 14px 16px;
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: calc(14px * var(--font-scale));
   line-height: 1.6;
   border-radius: 18px;
   word-break: keep-all;
@@ -56,7 +56,7 @@
   margin-top: 6px;
   padding: 0 4px;
   font-family: var(--font-body);
-  font-size: 11px;
+  font-size: calc(11px * var(--font-scale));
   color: rgba(45, 49, 66, 0.38);
 }
 
@@ -78,7 +78,7 @@
 .chat-panel__choice {
   padding: 11px 18px;
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: calc(14px * var(--font-scale));
   font-weight: 700;
   color: #7b6fd4;
   background: #fff;

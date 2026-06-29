@@ -24,7 +24,7 @@
 .confirm-modal__message {
   margin: 0 0 24px;
   font-family: var(--font-title);
-  font-size: 17px;
+  font-size: calc(17px * var(--font-scale));
   font-weight: 700;
   line-height: 1.5;
   color: #2d3142;
@@ -39,5 +39,5 @@
 .confirm-modal__actions .btn {
   flex: 1;
   padding: 14px 12px;
-  font-size: 15px;
+  font-size: calc(15px * var(--font-scale));
 }

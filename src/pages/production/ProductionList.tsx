@@ -2,8 +2,7 @@ import { useEffect, useState, type MouseEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { songsApi } from '../../shared/apis/songs/songsApi';
 import ConfirmModal from '../../shared/components/modal/ConfirmModal';
-import PageHeader from '../../shared/components/header/PageHeader';
-import AnimatedGradientBackground from '../../shared/styles/AnimatedGradientBackground/AnimatedGradientBackground';
+import ChatPageHeader from '../../shared/components/header/ChatPageHeader';
 import type { Song } from '../../shared/types/song';
 import { isLoggedIn } from '../../shared/utils/authStorage';
 import './ProductionList.css';
@@ -57,8 +56,12 @@ export default function ProductionList() {
   };
 
   return (
-    <AnimatedGradientBackground variant="auth" className="production-list">
-      <PageHeader title="제작 진행 현황" onBack={() => navigate('/my')} />
+    <div className="production-list">
+      <ChatPageHeader
+        title="제작 진행 현황"
+        subtitle="나의 음악 정보"
+        onBack={() => navigate('/my')}
+      />
 
       <main className="production-list__main">
         {loading ? (
@@ -114,6 +117,6 @@ export default function ProductionList() {
           if (!deleting) setPendingDelete(null);
         }}
       />
-    </AnimatedGradientBackground>
+    </div>
   );
 }

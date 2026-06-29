@@ -33,7 +33,7 @@
   margin: 20px 0 32px;
   padding: 18px 20px;
   border-radius: 20px;
-  font-size: 16px;
+  font-size: calc(16px * var(--font-scale));
   letter-spacing: -0.02em;
 }
 
@@ -69,7 +69,7 @@
 .home__section-title {
   margin: 0 0 16px;
   font-family: var(--font-title);
-  font-size: 18px;
+  font-size: calc(18px * var(--font-scale));
   font-weight: 700;
   color: #2d3142;
 }
@@ -102,7 +102,7 @@
 .home__song-title {
   margin: 0 0 4px;
   font-family: var(--font-title);
-  font-size: 15px;
+  font-size: calc(15px * var(--font-scale));
   font-weight: 700;
   color: #2d3142;
 }
@@ -110,7 +110,7 @@
 .home__song-meta {
   margin: 0;
   font-family: var(--font-body);
-  font-size: 12px;
+  font-size: calc(12px * var(--font-scale));
   color: rgba(45, 49, 66, 0.55);
 }
 
@@ -131,14 +131,14 @@
 
 .home__song-percent {
   font-family: var(--font-body);
-  font-size: 11px;
+  font-size: calc(11px * var(--font-scale));
   color: rgba(45, 49, 66, 0.45);
 }
 
 .home__empty {
   margin: 0;
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: calc(14px * var(--font-scale));
   color: rgba(45, 49, 66, 0.45);
   text-align: center;
   padding: 32px 0;

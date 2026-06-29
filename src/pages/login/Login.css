@@ -14,7 +14,7 @@
 .login__error {
   margin: -16px 0 0;
   font-family: var(--font-body);
-  font-size: 13px;
+  font-size: calc(13px * var(--font-scale));
   color: #e53935;
   text-align: center;
 }
@@ -26,7 +26,7 @@
 }
 
 .underline-input__label {
-  font-size: 13px;
+  font-size: calc(13px * var(--font-scale));
   font-weight: 700;
   color: #B8AED0;
 }
@@ -35,7 +35,7 @@
   width: 100%;
   padding: 4px 0;
   font-family: 'Line Seed KR', sans-serif;
-  font-size: 16px;
+  font-size: calc(16px * var(--font-scale));
   color: #2D3142;
   background: transparent;
   border: none;
@@ -44,7 +44,7 @@
 
 .underline-input__field::placeholder {
   color: #B8AED0;
-  font-size: 15px;
+  font-size: calc(15px * var(--font-scale));
 }
 
 .underline-input__line {

@@ -16,7 +16,7 @@
 .landing__promo-line {
   margin: 0;
   font-family: var(--font-title);
-  font-size: 26px;
+  font-size: calc(26px * var(--font-scale));
   font-weight: 700;
   line-height: 1.45;
   color: #2D3142;
@@ -36,7 +36,7 @@
 
 .landing__terms {
   margin: 20px 0 0;
-  font-size: 11px;
+  font-size: calc(11px * var(--font-scale));
   font-weight: 400;
   color: #A0A0A0;
   text-align: center;

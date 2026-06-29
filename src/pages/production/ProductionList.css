@@ -3,6 +3,13 @@
   max-width: 430px;
   margin: 0 auto;
   color: #2d3142;
+  background: linear-gradient(
+    180deg,
+    #eef3fb 0%,
+    #e9eef8 35%,
+    #ebe6f6 70%,
+    #ede8f8 100%
+  );
 }
 
 .production-list__main {
@@ -76,7 +83,7 @@
 .production-list__title {
   margin: 0 0 4px;
   font-family: var(--font-title);
-  font-size: 15px;
+  font-size: calc(15px * var(--font-scale));
   font-weight: 700;
   color: #2d3142;
 }
@@ -84,7 +91,7 @@
 .production-list__meta {
   margin: 0;
   font-family: var(--font-body);
-  font-size: 12px;
+  font-size: calc(12px * var(--font-scale));
   color: rgba(45, 49, 66, 0.55);
 }
 
@@ -105,7 +112,7 @@
 
 .production-list__percent {
   font-family: var(--font-body);
-  font-size: 11px;
+  font-size: calc(11px * var(--font-scale));
   color: rgba(45, 49, 66, 0.45);
 }
 
@@ -113,7 +120,7 @@
   margin: 0;
   padding: 48px 0;
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: calc(14px * var(--font-scale));
   color: rgba(45, 49, 66, 0.45);
   text-align: center;
 }

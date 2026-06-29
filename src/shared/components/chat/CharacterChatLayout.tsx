@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react';
-import { characterImage, logoImage } from '../../assets';
+import { characterImage } from '../../assets';
+import ChatPageHeader from '../header/ChatPageHeader';
 import './CharacterChatLayout.css';
 
 interface CharacterChatLayoutProps {
@@ -34,22 +35,7 @@ export default function CharacterChatLayout({
 
   return (
     <div className={`character-chat ${className}`.trim()}>
-      <header className="character-chat__header">
-        {onBack && (
-          <button type="button" className="character-chat__back" onClick={onBack} aria-label="뒤로 가기">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M15 18l-6-6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-        )}
-        <div className="character-chat__header-body">
-          <div className="character-chat__header-text">
-            <h1 className="character-chat__title">{title}</h1>
-            <p className="character-chat__subtitle">{subtitle}</p>
-          </div>
-          <img src={logoImage} alt="나도 가수다" className="character-chat__logo" />
-        </div>
-      </header>
+      <ChatPageHeader title={title} subtitle={subtitle} onBack={onBack} />
 
       <div className="character-chat__main" onClick={handleMainTap}>
         <div className="character-chat__character-wrap">

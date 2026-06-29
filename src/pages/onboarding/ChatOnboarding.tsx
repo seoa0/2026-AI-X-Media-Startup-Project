@@ -1,18 +1,23 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Button from '../../shared/components/button/Button';
 import CharacterChatLayout from '../../shared/components/chat/CharacterChatLayout';
 import VoiceConversationPanel from '../../shared/components/chat/VoiceConversationPanel';
 import VoiceRecorderBar from '../../shared/components/chat/VoiceRecorderBar';
 import {
+  FAVORITE_SONG_EXAMPLES,
   GENRE_CHOICES,
+  INTRO_CHOICES,
   ONBOARDING_QUESTIONS,
+  RECENT_SONG_EXAMPLES,
+  SONG_TITLE_EXAMPLES,
   STORY_CHOICES,
   buildAfterGenreMessage,
   buildCompletionMessage,
   buildGenreQuestionMessage,
   getFirstQuestionMessage,
   getIntroMessage,
+  getServiceAskMessage,
+  getServiceDescriptionMessage,
   matchChoiceFromSpeech,
   parseIntroSpeech,
   recommendGenres,
@@ -32,11 +37,6 @@ interface Answers {
   story: string;
 }
 
-const INTRO_CHOICES: ChatChoice[] = [
-  { label: '네, 시작할게요!', value: 'start' },
-  { label: '잠깐만요 🤔', value: 'question' },
-];
-
 const EMPTY_ANSWERS: Answers = {
   recentSong: '',
   favoriteSong: '',
@@ -53,7 +53,6 @@ export default function ChatOnboarding() {
   const [choices, setChoices] = useState<ChatChoice[]>([]);
   const [answers, setAnswers] = useState<Answers>(EMPTY_ANSWERS);
   const [recommendedGenres, setRecommendedGenres] = useState<string[]>([]);
-  const [showPackageBtn, setShowPackageBtn] = useState(false);
   const [status, setStatus] = useState<VoiceSessionStatus>('idle');
   const [liveTranscript, setLiveTranscript] = useState('');
 
@@ -74,18 +73,43 @@ export default function ChatOnboarding() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const resetToIntro = () => {
+    setStep('intro');
+    appendMessage('bot', getIntroMessage());
+    setChoices(INTRO_CHOICES);
+  };
+
   const startFirstQuestion = () => {
     setStep('recentSong');
     appendMessage('bot', getFirstQuestionMessage());
-    setChoices([]);
+    setChoices(RECENT_SONG_EXAMPLES);
+  };
+
+  const handleServiceExplain = (label: string, source: ChatMessage['source'] = 'text') => {
+    appendMessage('user', label, source);
+    appendMessage('bot', getServiceAskMessage());
+    appendMessage('bot', getServiceDescriptionMessage());
+    resetToIntro();
   };
 
   const handleIntroChoice = (value: string, label: string, source: ChatMessage['source'] = 'text') => {
-    appendMessage('user', label, source);
     if (value === 'question') {
-      appendMessage('bot', '궁금한 점은 제작 시작 후에도 언제든지 물어보세요!\n그럼 시작해 볼게요.');
+      handleServiceExplain(label, source);
+      return;
     }
+    appendMessage('user', label, source);
     startFirstQuestion();
+  };
+
+  const finishOnboarding = async (value: string, source: ChatMessage['source']) => {
+    appendMessage('user', value, source);
+    saveOnboardingData({ songTitle: value });
+    appendMessage('bot', buildCompletionMessage(value));
+    setStep('done');
+    setChoices([]);
+    completeIntroChat();
+    await syncOnboardingToServer();
+    navigate('/packages');
   };
 
   const submitRecentSong = async (value: string, source: ChatMessage['source']) => {
@@ -101,7 +125,7 @@ export default function ChatOnboarding() {
     );
     setStep('favoriteSong');
     appendMessage('bot', botText);
-    setChoices([]);
+    setChoices(FAVORITE_SONG_EXAMPLES);
     setStatus('idle');
   };
 
@@ -150,16 +174,7 @@ export default function ChatOnboarding() {
     appendMessage('user', value, source);
     appendMessage('bot', buildAfterGenreMessage(value));
     setStep('songTitle');
-    setChoices([]);
-  };
-
-  const submitSongTitle = async (value: string, source: ChatMessage['source']) => {
-    appendMessage('user', value, source);
-    saveOnboardingData({ songTitle: value });
-    appendMessage('bot', buildCompletionMessage(value));
-    setStep('done');
-    setChoices([]);
-    setShowPackageBtn(true);
+    setChoices(SONG_TITLE_EXAMPLES);
   };
 
   const handleChoice = async (choice: ChatChoice) => {
@@ -169,12 +184,24 @@ export default function ChatOnboarding() {
       handleIntroChoice(choice.value, choice.label);
       return;
     }
+    if (step === 'recentSong') {
+      await submitRecentSong(choice.value, 'text');
+      return;
+    }
+    if (step === 'favoriteSong') {
+      await submitFavoriteSong(choice.value, 'text');
+      return;
+    }
     if (step === 'story') {
       await submitStory(choice.label, 'text');
       return;
     }
     if (step === 'genre') {
       await submitGenre(choice.value, 'text');
+      return;
+    }
+    if (step === 'songTitle') {
+      await finishOnboarding(choice.value, 'text');
     }
   };
 
@@ -187,15 +214,17 @@ export default function ChatOnboarding() {
 
     if (step === 'intro') {
       const intent = parseIntroSpeech(trimmed);
-      handleIntroChoice(intent, intent === 'question' ? '잠깐만요' : '네, 시작할게요!', 'voice');
+      handleIntroChoice(intent, intent === 'question' ? '잠깐만요 🤔' : '네, 시작할게요!', 'voice');
       return;
     }
     if (step === 'recentSong') {
-      await submitRecentSong(trimmed, 'voice');
+      const matched = matchChoiceFromSpeech(trimmed, RECENT_SONG_EXAMPLES);
+      await submitRecentSong(matched?.value ?? trimmed, 'voice');
       return;
     }
     if (step === 'favoriteSong') {
-      await submitFavoriteSong(trimmed, 'voice');
+      const matched = matchChoiceFromSpeech(trimmed, FAVORITE_SONG_EXAMPLES);
+      await submitFavoriteSong(matched?.value ?? trimmed, 'voice');
       return;
     }
     if (step === 'story') {
@@ -213,7 +242,8 @@ export default function ChatOnboarding() {
       return;
     }
     if (step === 'songTitle') {
-      await submitSongTitle(trimmed, 'voice');
+      const matched = matchChoiceFromSpeech(trimmed, SONG_TITLE_EXAMPLES);
+      await finishOnboarding(matched?.value ?? trimmed, 'voice');
     }
   };
 
@@ -232,7 +262,11 @@ export default function ChatOnboarding() {
 
       const { transcript } = recorder ? await recorder.stop() : { transcript: '' };
       setLiveTranscript('');
-      await processVoiceInput(transcript);
+      try {
+        await processVoiceInput(transcript);
+      } finally {
+        setStatus('idle');
+      }
       return;
     }
 
@@ -248,12 +282,6 @@ export default function ChatOnboarding() {
       setStatus('idle');
       alert('마이크 권한이 필요합니다. 브라우저 설정에서 허용해 주세요.');
     }
-  };
-
-  const handleGoToPackages = async () => {
-    completeIntroChat();
-    await syncOnboardingToServer();
-    navigate('/packages');
   };
 
   return (
@@ -273,13 +301,6 @@ export default function ChatOnboarding() {
         choices={choices}
         onChoice={handleChoice}
         defaultBotText="안녕하세요! 마이크를 눌러 대화를 시작해 주세요."
-        inlineAction={
-          showPackageBtn ? (
-            <Button variant="primary" layout="full" onClick={handleGoToPackages}>
-              플랜 선택하기
-            </Button>
-          ) : undefined
-        }
       />
     </CharacterChatLayout>
   );

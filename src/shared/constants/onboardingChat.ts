@@ -1,9 +1,39 @@
-export type ChatStep = 'intro' | 'recentSong' | 'favoriteSong' | 'story' | 'genre' | 'songTitle' | 'done';
+export type ChatStep =
+  | 'intro'
+  | 'recentSong'
+  | 'favoriteSong'
+  | 'story'
+  | 'genre'
+  | 'songTitle'
+  | 'done';
 
 export interface ChatChoice {
   label: string;
   value: string;
 }
+
+export const INTRO_CHOICES: ChatChoice[] = [
+  { label: '네, 시작할게요!', value: 'start' },
+  { label: '잠깐만요 🤔', value: 'question' },
+];
+
+export const RECENT_SONG_EXAMPLES: ChatChoice[] = [
+  { label: '아이유 - 밤편지', value: '아이유 - 밤편지' },
+  { label: '뉴진스 - Ditto', value: '뉴진스 - Ditto' },
+  { label: '발라드를 자주 들어요', value: '발라드' },
+];
+
+export const FAVORITE_SONG_EXAMPLES: ChatChoice[] = [
+  { label: '성시경 - 너의 모든 순간', value: '성시경 - 너의 모든 순간' },
+  { label: '아이유 - 좋은 날', value: '아이유 - 좋은 날' },
+  { label: 'BTS - Spring Day', value: 'BTS - Spring Day' },
+];
+
+export const SONG_TITLE_EXAMPLES: ChatChoice[] = [
+  { label: '봄날의 기억', value: '봄날의 기억' },
+  { label: '너에게 가는 길', value: '너에게 가는 길' },
+  { label: '나의 이야기', value: '나의 이야기' },
+];
 
 export const STORY_CHOICES: ChatChoice[] = [
   { label: '사랑 이야기', value: '사랑' },
@@ -58,6 +88,20 @@ export function getIntroMessage() {
 고객님만의 음악을 위해 몇 가지 여쭤볼게요.`;
 }
 
+export function getServiceAskMessage() {
+  return '저희 서비스에 대해서 알려드릴까요?';
+}
+
+export function getServiceDescriptionMessage() {
+  return `나도 가수다는 AI와 함께 나만의 노래를 만드는 서비스예요.
+
+🎵 대화만으로 취향과 이야기를 나누고
+🎤 가사 · 멜로디 · 보컬까지 단계별로 제작하며
+📀 완성된 곡을 발매하고 관리할 수 있어요.
+
+처음이시라면 걱정하지 마세요. 제가 차근차근 도와드릴게요!`;
+}
+
 export function getFirstQuestionMessage() {
   return ONBOARDING_QUESTIONS.recentSong;
 }
@@ -71,7 +115,7 @@ export function buildAfterGenreMessage(genre: string) {
 }
 
 export function buildCompletionMessage(songTitle: string) {
-  return `«${songTitle}», 멋진 제목이에요!\n이제 제작에 들어가겠습니다!`;
+  return `«${songTitle}», 멋진 제목이에요!\n이제 플랜을 선택하고 제작을 시작해 볼게요!`;
 }
 
 export function recommendGenres(input: {

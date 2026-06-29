@@ -1,0 +1,61 @@
+.font-size-settings {
+  min-height: 100dvh;
+  max-width: 430px;
+  margin: 0 auto;
+  background: linear-gradient(
+    180deg,
+    #eef3fb 0%,
+    #e9eef8 35%,
+    #ebe6f6 70%,
+    #ede8f8 100%
+  );
+  color: #2d3142;
+}
+
+.font-size-settings__main {
+  padding: 24px 20px 40px;
+}
+
+.font-size-settings__section {
+  margin-bottom: 28px;
+}
+
+.font-size-settings__label {
+  margin: 0 0 12px;
+  font-family: var(--font-title);
+  font-size: calc(15px * var(--font-scale));
+  font-weight: 700;
+  color: #2d3142;
+}
+
+.font-size-settings__preview-caption {
+  margin: 0 0 10px;
+  font-family: var(--font-body);
+  font-size: calc(12px * var(--font-scale));
+  font-weight: 600;
+  color: rgba(45, 49, 66, 0.45);
+}
+
+.font-size-settings__preview-card {
+  padding: 18px 16px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  border-radius: 18px;
+  box-shadow: 0 6px 20px rgba(139, 127, 212, 0.08);
+}
+
+.font-size-settings__preview-title {
+  margin: 0 0 10px;
+  font-family: var(--font-title);
+  font-size: calc(17px * var(--font-scale));
+  font-weight: 700;
+  color: #2d3142;
+}
+
+.font-size-settings__preview-body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: calc(14px * var(--font-scale));
+  line-height: 1.6;
+  color: #2d3142;
+}

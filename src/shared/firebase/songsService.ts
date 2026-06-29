@@ -33,7 +33,7 @@ function createInitialMessages(packageId?: string): ChatMessage[] {
   const time = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
 
   const text = pkg
-    ? `${pkg.title} 패키지로 시작하겠습니다!\n${PRODUCTION_START_MESSAGE}`
+    ? `${pkg.title} 로 시작하겠습니다!\n${PRODUCTION_START_MESSAGE}`
     : PRODUCTION_START_MESSAGE;
 
   return [{ id: crypto.randomUUID(), role: 'bot', text, time }];

@@ -32,7 +32,7 @@
 .package-select__subtitle {
   margin: 0;
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: calc(14px * var(--font-scale));
   color: rgba(45, 49, 66, 0.55);
 }
 

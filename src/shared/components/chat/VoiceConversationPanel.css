@@ -1,10 +1,20 @@
 .voice-conversation {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   gap: 16px;
+  flex: 1;
+  min-height: 0;
   height: 100%;
-  padding: 8px 4px 12px;
+  padding: 40px 4px 16px;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.voice-conversation::-webkit-scrollbar {
+  display: none;
 }
 
 .voice-conversation__status {
@@ -14,7 +24,7 @@
   align-self: flex-start;
   padding: 6px 12px;
   font-family: var(--font-body);
-  font-size: 12px;
+  font-size: calc(12px * var(--font-scale));
   font-weight: 600;
   color: rgba(45, 49, 66, 0.7);
   background: rgba(255, 255, 255, 0.72);
@@ -52,7 +62,7 @@
 .voice-conversation__current-label {
   margin: 0 0 8px;
   font-family: var(--font-body);
-  font-size: 11px;
+  font-size: calc(11px * var(--font-scale));
   font-weight: 700;
   color: #9da8e8;
   letter-spacing: 0.04em;
@@ -62,7 +72,7 @@
 .voice-conversation__current-text {
   margin: 0;
   font-family: var(--font-title);
-  font-size: 18px;
+  font-size: calc(18px * var(--font-scale));
   font-weight: 700;
   color: #2d3142;
   line-height: 1.55;
@@ -94,13 +104,13 @@
 
 .voice-conversation__history {
   flex: 1;
-  min-height: 0;
+  min-height: 120px;
 }
 
 .voice-conversation__history-title {
   margin: 0 0 8px;
   font-family: var(--font-body);
-  font-size: 11px;
+  font-size: calc(11px * var(--font-scale));
   font-weight: 700;
   color: rgba(45, 49, 66, 0.45);
 }
@@ -136,7 +146,7 @@
 .voice-chat__bubble {
   padding: 14px 16px;
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: calc(14px * var(--font-scale));
   line-height: 1.6;
   border-radius: 18px;
   word-break: keep-all;
@@ -160,7 +170,7 @@
   margin-top: 6px;
   padding: 0 4px;
   font-family: var(--font-body);
-  font-size: 11px;
+  font-size: calc(11px * var(--font-scale));
   color: rgba(45, 49, 66, 0.38);
 }
 
@@ -175,20 +185,22 @@
 }
 
 .voice-conversation__choice {
-  padding: 10px 14px;
+  padding: 12px 18px;
   font-family: var(--font-body);
-  font-size: 13px;
-  font-weight: 600;
+  font-size: calc(14px * var(--font-scale));
+  font-weight: 700;
   color: #2d3142;
-  background: rgba(255, 255, 255, 0.85);
+  background: #fff;
   border: 1px solid rgba(157, 168, 232, 0.45);
   border-radius: 999px;
+  box-shadow: 0 2px 10px rgba(45, 49, 66, 0.06);
   cursor: pointer;
-  transition: background 0.15s ease;
+  transition: background 0.15s ease, transform 0.15s ease;
 }
 
 .voice-conversation__choice:active {
-  background: rgba(157, 168, 232, 0.2);
+  background: rgba(255, 255, 255, 0.95);
+  transform: scale(0.98);
 }
 
 .voice-conversation__inline-action {

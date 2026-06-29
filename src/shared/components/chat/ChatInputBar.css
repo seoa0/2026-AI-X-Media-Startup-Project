@@ -12,7 +12,7 @@
   width: 100%;
   padding: 14px 52px 14px 18px;
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: calc(14px * var(--font-scale));
   color: #2d3142;
   background: #fff;
   border: none;
