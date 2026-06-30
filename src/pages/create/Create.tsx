@@ -6,7 +6,8 @@ import CharacterChatLayout from '../../shared/components/chat/CharacterChatLayou
 import VoiceConversationPanel from '../../shared/components/chat/VoiceConversationPanel';
 import VoiceRecorderBar from '../../shared/components/chat/VoiceRecorderBar';
 import BottomNav from '../../shared/components/nav/BottomNav';
-import { ASSISTANT_NAME } from '../../shared/constants/onboardingChat';
+import { ASSISTANT_NAME, VOICE_CONFIRM_CHOICES } from '../../shared/constants/onboardingChat';
+import { getCreateExampleHint } from '../../shared/constants/createChat';
 import { getPackageById } from '../../shared/constants/packages';
 import {
   CREATE_WRAPUP_DONE,
@@ -15,7 +16,7 @@ import {
 } from '../../shared/firebase/llmService';
 import { isSpeechRecognitionSupported, VoiceRecorder } from '../../shared/firebase/voiceService';
 import type { Song } from '../../shared/types/song';
-import { createChatId, formatChatTime, type ChatMessage, type VoiceSessionStatus } from '../../shared/types/chat';
+import { createChatId, formatChatTime, type ChatChoice, type ChatMessage, type VoiceSessionStatus } from '../../shared/types/chat';
 import { isLoggedIn } from '../../shared/utils/authStorage';
 import { isIntroChatComplete } from '../../shared/utils/onboardingStorage';
 
@@ -28,8 +29,11 @@ export default function Create() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [status, setStatus] = useState<VoiceSessionStatus>('idle');
   const [liveTranscript, setLiveTranscript] = useState('');
+  const [pendingVoice, setPendingVoice] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [readyForLyrics, setReadyForLyrics] = useState(false);
+
+  const userTurnCount = messages.filter((m) => m.role === 'user').length;
 
   const saveMessages = useCallback(
     async (nextMessages: ChatMessage[], currentSong: Song) => {
@@ -82,6 +86,74 @@ export default function Create() {
     if (song) navigate(`/lyrics/${song.id}`);
   };
 
+  const submitUserMessage = async (userText: string) => {
+    if (!song) return;
+
+    const userMessage: ChatMessage = {
+      id: createChatId(),
+      role: 'user',
+      text: userText,
+      time: formatChatTime(),
+      source: 'voice',
+    };
+
+    const withUser = [...messages, userMessage];
+    setMessages(withUser);
+    setStatus('processing');
+
+    const wrapUpAlreadyAsked = messages.some((m) => m.role === 'bot' && isWrapUpQuestion(m.text));
+
+    let botText: string;
+    if (wrapUpAlreadyAsked) {
+      botText = CREATE_WRAPUP_DONE;
+    } else {
+      const pkg = song.packageId ? getPackageById(song.packageId) : null;
+      const turnCount = withUser.filter((m) => m.role === 'user').length;
+      botText = await generateMusicAssistantReply(withUser, {
+        packageTitle: pkg?.title,
+        step: song.step,
+        userTurnCount: turnCount,
+      });
+    }
+
+    const botMessage: ChatMessage = {
+      id: createChatId(),
+      role: 'bot',
+      text: botText,
+      time: formatChatTime(),
+      source: 'text',
+    };
+
+    const nextMessages = [...withUser, botMessage];
+    setMessages(nextMessages);
+    await saveMessages(nextMessages, song);
+
+    if (wrapUpAlreadyAsked) {
+      setReadyForLyrics(true);
+    }
+
+    setStatus('idle');
+  };
+
+  const handleChoice = async (choice: ChatChoice) => {
+    if (status === 'processing' || readyForLyrics || !pendingVoice) return;
+
+    if (choice.value === '__confirm__') {
+      const text = pendingVoice;
+      setPendingVoice(null);
+      await submitUserMessage(text);
+      return;
+    }
+
+    if (choice.value === '__retry__') {
+      setPendingVoice(null);
+    }
+  };
+
+  const processVoiceInput = (text: string) => {
+    setPendingVoice(text);
+  };
+
   const handleToggleRecord = async () => {
     if (!song || status === 'processing' || readyForLyrics) return;
 
@@ -96,60 +168,20 @@ export default function Create() {
       voiceRecorderRef.current = null;
 
       const { transcript } = recorder ? await recorder.stop() : { transcript: '' };
-      const userText = transcript.trim();
-
-      if (!userText) {
+      setLiveTranscript('');
+      const trimmed = transcript.trim();
+      if (!trimmed) {
         alert('말씀이 인식되지 않았습니다. 다시 시도해 주세요.');
         setStatus('idle');
-        setLiveTranscript('');
         return;
       }
-
-      const userMessage: ChatMessage = {
-        id: createChatId(),
-        role: 'user',
-        text: userText,
-        time: formatChatTime(),
-        source: 'voice',
-      };
-
-      const withUser = [...messages, userMessage];
-      setMessages(withUser);
-      setLiveTranscript('');
-
-      const wrapUpAlreadyAsked = messages.some((m) => m.role === 'bot' && isWrapUpQuestion(m.text));
-
-      let botText: string;
-      if (wrapUpAlreadyAsked) {
-        botText = CREATE_WRAPUP_DONE;
-      } else {
-        const pkg = song.packageId ? getPackageById(song.packageId) : null;
-        const userTurnCount = withUser.filter((m) => m.role === 'user').length;
-        botText = await generateMusicAssistantReply(withUser, {
-          packageTitle: pkg?.title,
-          step: song.step,
-          userTurnCount,
-        });
-      }
-
-      const botMessage: ChatMessage = {
-        id: createChatId(),
-        role: 'bot',
-        text: botText,
-        time: formatChatTime(),
-        source: 'text',
-      };
-
-      const nextMessages = [...withUser, botMessage];
-      setMessages(nextMessages);
-      await saveMessages(nextMessages, song);
-
-      if (wrapUpAlreadyAsked) {
-        setReadyForLyrics(true);
-      }
-
+      processVoiceInput(trimmed);
       setStatus('idle');
       return;
+    }
+
+    if (pendingVoice) {
+      setPendingVoice(null);
     }
 
     const recorder = new VoiceRecorder();
@@ -179,6 +211,14 @@ export default function Create() {
     ? `${selectedPackage.title} · ${song.step}`
     : '1. 제작 시작';
 
+  const displayChoices = pendingVoice ? VOICE_CONFIRM_CHOICES : [];
+  const exampleHint = pendingVoice || readyForLyrics ? null : getCreateExampleHint(userTurnCount);
+
+  const statusLabels: Partial<Record<VoiceSessionStatus, string>> = {
+    listening: '듣고 있어요...',
+    processing: '또비가 답변을 준비하고 있어요...',
+  };
+
   return (
     <CharacterChatLayout
       title="나만의 노래 제작"
@@ -206,7 +246,12 @@ export default function Create() {
         messages={messages}
         status={status}
         liveTranscript={liveTranscript}
+        choices={displayChoices}
+        onChoice={handleChoice}
         assistantName={ASSISTANT_NAME}
+        pendingVoiceText={pendingVoice}
+        statusLabels={statusLabels}
+        exampleHint={exampleHint}
         inlineAction={
           readyForLyrics ? (
             <Button variant="primary" layout="full" onClick={goToLyrics}>

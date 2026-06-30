@@ -10,6 +10,10 @@ import {
   where,
 } from 'firebase/firestore';
 import { getPackageById } from '../constants/packages';
+import {
+  getCreateMicGuide,
+  getCreateStartMessage,
+} from '../constants/createChat';
 import type { ChatMessage } from '../types/chat';
 import type { CreateSongRequest, Song, SongStatus, UpdateSongRequest } from '../types/song';
 import {
@@ -25,18 +29,24 @@ import { withTimeout } from './withTimeout';
 const FIRESTORE_TIMEOUT_MS = 8000;
 
 const PRODUCTION_START_MESSAGE =
-  '좋습니다! 이제 본격적으로 곡을 만들어 보겠습니다.\n어떤 느낌의 곡을 원하시나요? 자유롭게 말씀해 주세요!';
+  '좋아요! 이제 본격적으로 곡을 만들어 볼게요.\n어떤 느낌의 곡을 원하시나요?';
 
 function createInitialMessages(packageId?: string): ChatMessage[] {
   const pkg = packageId ? getPackageById(packageId) : null;
   const now = new Date();
   const time = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
 
-  const text = pkg
-    ? `${pkg.title} 로 시작하겠습니다!\n${PRODUCTION_START_MESSAGE}`
-    : PRODUCTION_START_MESSAGE;
+  if (pkg) {
+    return [
+      { id: crypto.randomUUID(), role: 'bot', text: getCreateStartMessage(pkg.title), time },
+      { id: crypto.randomUUID(), role: 'bot', text: getCreateMicGuide(), time },
+    ];
+  }
 
-  return [{ id: crypto.randomUUID(), role: 'bot', text, time }];
+  return [
+    { id: crypto.randomUUID(), role: 'bot', text: PRODUCTION_START_MESSAGE, time },
+    { id: crypto.randomUUID(), role: 'bot', text: getCreateMicGuide(), time },
+  ];
 }
 
 function requireUid() {
