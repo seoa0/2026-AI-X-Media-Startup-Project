@@ -18,6 +18,7 @@ import {
   buildSummaryMessage,
   buildVoiceOwnerMessage,
   buildVoiceRecordMessage,
+  getSongTitleMessage,
   getChoicesForStep,
   getExampleHintForStep,
   getFarewellMessages,
@@ -51,6 +52,7 @@ interface Answers {
   selectedGenre: string;
   giftTarget: string;
   voiceOwner: 'self' | 'other';
+  songTitle: string;
 }
 
 const EMPTY_ANSWERS: Answers = {
@@ -60,6 +62,7 @@ const EMPTY_ANSWERS: Answers = {
   selectedGenre: '',
   giftTarget: '',
   voiceOwner: 'self',
+  songTitle: '',
 };
 
 type InputMode = null | 'storyText' | 'customGenre' | 'customGift';
@@ -229,7 +232,13 @@ export default function ChatOnboarding() {
     restoreStepChoices('voiceOwner');
   };
 
-  const goToSummary = (voiceOwner: 'self' | 'other') => {
+  const goToSongTitle = () => {
+    setStep('songTitle');
+    appendMessage('bot', getSongTitleMessage());
+    restoreStepChoices('songTitle');
+  };
+
+  const goToSummary = (voiceOwner: 'self' | 'other', songTitle: string) => {
     const genre = answers.selectedGenre || finalGenres[0] || '발라드';
     const story = fullStory || '당신만의 이야기';
     const gift = answers.giftTarget || '자기 자신';
@@ -238,6 +247,7 @@ export default function ChatOnboarding() {
       'bot',
       buildSummaryMessage({
         userName,
+        songTitle,
         genre,
         story,
         voiceLabel: getVoiceLabel(voiceOwner),
@@ -245,6 +255,13 @@ export default function ChatOnboarding() {
       }),
     );
     restoreStepChoices('summary');
+  };
+
+  const submitSongTitle = (value: string, source: ChatMessage['source']) => {
+    appendMessage('user', value, source);
+    setAnswers((prev) => ({ ...prev, songTitle: value }));
+    saveOnboardingData({ songTitle: value });
+    goToSummary(answers.voiceOwner, value);
   };
 
   const submitVoiceOwner = (value: 'self' | 'other', label: string, source: ChatMessage['source']) => {
@@ -261,7 +278,7 @@ export default function ChatOnboarding() {
       restoreStepChoices('voiceRecord');
       return;
     }
-    goToSummary('self');
+    goToSongTitle();
   };
 
   const startReadSentence = () => {
@@ -272,7 +289,7 @@ export default function ChatOnboarding() {
 
   const finishOnboarding = async () => {
     const genre = answers.selectedGenre || finalGenres[0] || '발라드';
-    const songTitle = `${userName}의 ${genre} 노래`;
+    const songTitle = answers.songTitle.trim() || `${userName}의 ${genre} 노래`;
     saveOnboardingData({ songTitle, selectedGenre: genre });
 
     setStep('farewell');
@@ -309,6 +326,9 @@ export default function ChatOnboarding() {
       case 'story1':
         submitStory1(value, source);
         break;
+      case 'songTitle':
+        submitSongTitle(value, source);
+        break;
       case 'storyMore':
       case 'storyConfirm':
         addStoryPart(value, source);
@@ -319,7 +339,7 @@ export default function ChatOnboarding() {
       case 'voiceRecord':
         if (voiceRecordSubStep === 'read') {
           appendMessage('user', value, source);
-          goToSummary('other');
+          goToSongTitle();
         }
         break;
       default:

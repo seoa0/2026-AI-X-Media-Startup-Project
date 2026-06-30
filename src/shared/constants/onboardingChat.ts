@@ -9,6 +9,7 @@ export type ChatStep =
   | 'giftTarget'
   | 'voiceOwner'
   | 'voiceRecord'
+  | 'songTitle'
   | 'summary'
   | 'farewell'
   | 'done';
@@ -27,7 +28,7 @@ export const ONBOARDING_QUESTIONS = {
   recentSong: '평소 어떤 장르의 노래를 즐겨 들으시나요?',
   favoriteSong: '가장 좋아하는 곡이 무엇인가요?',
   story: '노래의 가사가 될 이야기를 말씀해주시겠어요?',
-  songTitle: '이 노래의 제목은 무엇으로 할까요?',
+  songTitle: '이 노래의 제목은 뭘로 하고 싶으세요?',
 } as const;
 
 export const VOICE_CONFIRM_CHOICES: ChatChoice[] = [
@@ -90,6 +91,12 @@ export const SUMMARY_CHOICES: ChatChoice[] = [
   { label: '바꾸고 싶어요.', value: 'change' },
 ];
 
+export const SONG_TITLE_EXAMPLES: ChatChoice[] = [
+  { label: '봄날의 기억', value: '봄날의 기억' },
+  { label: '너에게 가는 길', value: '너에게 가는 길' },
+  { label: '나의 이야기', value: '나의 이야기' },
+];
+
 export const GENRE_FALLBACK = ['포크', '발라드', '록', 'K-POP', '힙합', 'R&B', '인디', '어쿠스틱'];
 
 const CONFIDENT_GENRES = ['발라드', 'K-POP', '포크', '록', 'R&B'];
@@ -109,6 +116,7 @@ export function getSubtitleForStep(step: ChatStep): string {
   if (step === 'finalGenre' || step === 'giftTarget' || step === 'voiceOwner' || step === 'voiceRecord') {
     return '최종 선택';
   }
+  if (step === 'songTitle' || step === 'summary' || step === 'farewell') return '마무리';
   return '마무리';
 }
 
@@ -152,8 +160,7 @@ export function buildStory1Message(favoriteSong: string) {
 
 이제,
 노래의 가사가 될 이야기를 말씀해주시겠어요?
-간단한 일화, 좋아하는 문장, 기억에 남는 일, 꿈 등
-어떤 것이든 좋아요.
+간단한 일화, 좋아하는 문장, 기억에 남는 일, 꿈 등 어떤 것이든 좋아요.
 
 당신의 이야기를 들려주세요.`;
 }
@@ -179,7 +186,7 @@ export function getStoryConfirmMessage() {
 export function buildFinalGenreThinkingMessage(userName: string) {
   return `또비가 생각하는 중 . . .
 
-${userName}님의 이야기를 또비가 잘 들었어요! 고맙습니다.
+${userName}님의 이야기를 또비가 잘 들었어요! 고마워요!
 
 당신만을 위한 노래가 만들어진다면 어떤 장르가 좋을까요?
 
@@ -208,8 +215,20 @@ export function buildReadSentenceMessage(sentence: string) {
 "${sentence}"`;
 }
 
+export function getSongTitleMessage() {
+  return `이 노래의 제목은 뭘로 하고 싶으세요?
+
+어차피 나중에 수정할 수 있어요!`;
+}
+
+export function getSongTitleMicGuide() {
+  return `마이크를 눌러
+제목을 말씀해주세요.`;
+}
+
 export function buildSummaryMessage(input: {
   userName: string;
+  songTitle: string;
   genre: string;
   story: string;
   voiceLabel: string;
@@ -218,11 +237,11 @@ export function buildSummaryMessage(input: {
   const storySnippet = input.story.length > 50 ? `${input.story.slice(0, 50)}…` : input.story;
   return `또비가 모든 이야기를 잘 들었어요!
 
-${input.userName}님의 노래는,
+${input.userName}님의 노래 «${input.songTitle}»는,
 ${input.genre} 장르로,
 ${storySnippet} 한 이야기를 담아
 ${input.voiceLabel}의 목소리로
-${input.giftTarget}께 선물드릴 거예요`;
+${input.giftTarget}께 선물드릴 거에요.`;
 }
 
 export function getFarewellMessages() {
@@ -371,6 +390,8 @@ export function getChoicesForStep(
       return VOICE_OWNER_CHOICES;
     case 'voiceRecord':
       return options.voiceRecordSubStep === 'read' ? [] : VOICE_RECORD_METHOD_CHOICES;
+    case 'songTitle':
+      return [];
     case 'summary':
       return SUMMARY_CHOICES;
     default:
@@ -391,6 +412,8 @@ export function getExampleHintForStep(
       return `예) ${FAVORITE_SONG_EXAMPLES.map((c) => c.label).join(' · ')}`;
     case 'story1':
       return `예) ${STORY_EXAMPLES.map((c) => c.label).join(' · ')}`;
+    case 'songTitle':
+      return `예) ${SONG_TITLE_EXAMPLES.map((c) => c.label).join(' · ')}`;
     case 'finalGenre':
       if (options.customGenreMode) {
         return `예) ${GENRE_EXAMPLES.map((c) => c.label).join(' · ')}`;
@@ -411,11 +434,13 @@ const PREVIOUS_STEP: Partial<Record<ChatStep, ChatStep>> = {
   giftTarget: 'finalGenre',
   voiceOwner: 'giftTarget',
   voiceRecord: 'voiceOwner',
-  summary: 'voiceOwner',
+  songTitle: 'voiceOwner',
+  summary: 'songTitle',
 };
 
 export function getPreviousStep(step: ChatStep, voiceOwner?: 'self' | 'other'): ChatStep | null {
-  if (step === 'summary' && voiceOwner === 'other') return 'voiceRecord';
+  if (step === 'songTitle' && voiceOwner === 'other') return 'voiceRecord';
+  if (step === 'summary' && voiceOwner === 'other') return 'songTitle';
   return PREVIOUS_STEP[step] ?? null;
 }
 
@@ -423,7 +448,7 @@ export function stepUsesMic(
   step: ChatStep,
   opts: { voiceRecordSubStep?: VoiceRecordSubStep; storyMoreMode?: 'more' | null } = {},
 ): boolean {
-  if (['greeting', 'genre', 'favoriteSong', 'story1'].includes(step)) return true;
+  if (['greeting', 'genre', 'favoriteSong', 'story1', 'songTitle'].includes(step)) return true;
   if (step === 'storyMore' && opts.storyMoreMode === 'more') return true;
   if (step === 'voiceRecord' && opts.voiceRecordSubStep === 'read') return true;
   if (step === 'finalGenre' && opts.storyMoreMode === 'more') return true;
@@ -443,6 +468,8 @@ export function getMicGuideForStep(
       return getFavoriteSongMicGuide();
     case 'story1':
       return getStory1MicGuide();
+    case 'songTitle':
+      return getSongTitleMicGuide();
     case 'voiceRecord':
       return opts.voiceRecordSubStep === 'read' ? '마이크를 눌러 문장을 읽어주세요' : null;
     default:
