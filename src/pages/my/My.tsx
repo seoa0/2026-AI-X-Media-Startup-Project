@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { APP_NAME } from '../../shared/constants/brand';
 import { authApi } from '../../shared/apis/auth';
 import { songsApi } from '../../shared/apis/songs/songsApi';
 import { logoImage } from '../../shared/assets';
@@ -49,7 +50,7 @@ function formatStreaming(count: number) {
 function MyFooter() {
   return (
     <footer className="my__footer">
-      <img src={logoImage} alt="나도 가수다" className="my__footer-logo" />
+      <img src={logoImage} alt={APP_NAME} className="my__footer-logo" />
       <p className="my__footer-meta">v1.0.0 · © 2026 NadoGasuda Inc.</p>
     </footer>
   );

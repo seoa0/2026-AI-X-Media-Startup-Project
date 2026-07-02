@@ -3,15 +3,8 @@
   max-width: 430px;
   margin: 0 auto;
   color: #2d3142;
-  background: linear-gradient(
-    180deg,
-    #eef3fb 0%,
-    #e9eef8 35%,
-    #ebe6f6 70%,
-    #ede8f8 100%
-  );
+  background: var(--bg-chat);
 }
-
 .production-list__main {
   padding: 8px 20px 40px;
 }
@@ -105,7 +98,7 @@
 
 .production-list__progress-bar {
   height: 100%;
-  background: linear-gradient(90deg, #8b7fd4, #a8b8e8);
+  background: var(--gradient-brand-h);
   border-radius: 999px;
   transition: width 0.3s;
 }

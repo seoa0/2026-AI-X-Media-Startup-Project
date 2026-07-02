@@ -1,4 +1,5 @@
 import { logoImage } from '../../assets';
+import { APP_NAME } from '../../constants/brand';
 import './ChatPageHeader.css';
 
 interface ChatPageHeaderProps {
@@ -22,7 +23,7 @@ export default function ChatPageHeader({ title, subtitle, onBack }: ChatPageHead
           <h1 className="chat-page-header__title">{title}</h1>
           {subtitle && <p className="chat-page-header__subtitle">{subtitle}</p>}
         </div>
-        <img src={logoImage} alt="나도 가수다" className="chat-page-header__logo" />
+        <img src={logoImage} alt={APP_NAME} className="chat-page-header__logo" />
       </div>
     </header>
   );

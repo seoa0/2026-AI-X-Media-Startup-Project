@@ -78,7 +78,7 @@ export default function Login() {
 
           {error && <p className="login__error">{error}</p>}
 
-          <Button type="submit" variant="primary" layout="full" disabled={loading}>
+          <Button type="submit" variant="glass" layout="full" disabled={loading}>
             {loading ? '로그인 중...' : '로그인'}
           </Button>
         </form>

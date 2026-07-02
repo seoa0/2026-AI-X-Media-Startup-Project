@@ -1,4 +1,6 @@
 .chat-page-header {
+  position: relative;
+  z-index: 5;
   display: flex;
   align-items: flex-start;
   gap: 4px;

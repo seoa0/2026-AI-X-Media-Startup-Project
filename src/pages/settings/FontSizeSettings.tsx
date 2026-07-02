@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { APP_NAME } from '../../shared/constants/brand';
 import { useNavigate } from 'react-router-dom';
 import ChatPageHeader from '../../shared/components/header/ChatPageHeader';
 import SegmentToggle from '../../shared/components/toggle/SegmentToggle';
@@ -12,7 +13,7 @@ import './FontSizeSettings.css';
 
 const PREVIEW_TEXT = {
   title: '나만의 노래 제작',
-  body: '안녕하세요! 저는 나도 가수다 AI 뮤직 메이트입니다. 고객님만의 음악을 위해 몇 가지 여쭤볼게요.',
+  body: `안녕하세요! 저는 ${APP_NAME} AI 뮤직 메이트입니다. 고객님만의 음악을 위해 몇 가지 여쭤볼게요.`,
   caption: '마이크를 눌러 말씀해 주세요',
 };
 

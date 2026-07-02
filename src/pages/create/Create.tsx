@@ -19,6 +19,9 @@ import type { Song } from '../../shared/types/song';
 import { createChatId, formatChatTime, type ChatChoice, type ChatMessage, type VoiceSessionStatus } from '../../shared/types/chat';
 import { isLoggedIn } from '../../shared/utils/authStorage';
 import { isIntroChatComplete } from '../../shared/utils/onboardingStorage';
+import { getSongRoute } from '../../shared/utils/songRoute';
+import { useBotMotionPulse } from '../../shared/hooks/useBotMotionPulse';
+import { resolveCharacterMotionMode } from '../../shared/utils/characterMotionMode';
 
 export default function Create() {
   const navigate = useNavigate();
@@ -34,6 +37,8 @@ export default function Create() {
   const [readyForLyrics, setReadyForLyrics] = useState(false);
 
   const userTurnCount = messages.filter((m) => m.role === 'user').length;
+  const botAnimating = useBotMotionPulse(messages);
+  const characterMotion = resolveCharacterMotionMode({ status, botAnimating });
 
   const saveMessages = useCallback(
     async (nextMessages: ChatMessage[], currentSong: Song) => {
@@ -72,10 +77,19 @@ export default function Create() {
     songsApi
       .getById(songId)
       .then((res) => {
-        setSong(res.data.song);
-        setMessages(res.data.song.messages);
+        const loaded = res.data.song;
+        if (!loaded.storySource) {
+          navigate(`/story-source/${loaded.id}`, { replace: true });
+          return;
+        }
+        if (loaded.storySource === 'prologue') {
+          navigate(getSongRoute(loaded), { replace: true });
+          return;
+        }
+        setSong(loaded);
+        setMessages(loaded.messages);
         setReadyForLyrics(
-          res.data.song.messages.some((m) => m.role === 'bot' && m.text.includes('가사 생성으로 넘어가')),
+          loaded.messages.some((m) => m.role === 'bot' && m.text.includes('가사 생성으로 넘어가')),
         );
       })
       .catch(() => navigate('/home', { replace: true }))
@@ -83,7 +97,7 @@ export default function Create() {
   }, [navigate, songId]);
 
   const goToLyrics = () => {
-    if (song) navigate(`/lyrics/${song.id}`);
+    if (song) navigate(`/lyrics-making/${song.id}`);
   };
 
   const submitUserMessage = async (userText: string) => {
@@ -224,6 +238,7 @@ export default function Create() {
       title="나만의 노래 제작"
       subtitle={subtitle}
       onBack={() => navigate('/home')}
+      characterMotion={characterMotion}
       footer={
         readyForLyrics ? (
           <div style={{ padding: '8px 16px 4px' }}>

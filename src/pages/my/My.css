@@ -28,10 +28,10 @@
   padding: 48px 24px 40px;
   background: linear-gradient(
     165deg,
-    #f0d4e4 0%,
-    #e4d4f0 32%,
-    #eef3fb 68%,
-    #ede8f8 100%
+    #ffd8b0 0%,
+    #f0c0e0 32%,
+    #fff5ee 68%,
+    #f5e8f4 100%
   );
 }
 
@@ -50,7 +50,7 @@
   height: 220px;
   top: -60px;
   right: -40px;
-  background: #f5dde2;
+  background: #ffe0c8;
 }
 
 .my__hero::after {
@@ -58,7 +58,7 @@
   height: 200px;
   bottom: -50px;
   left: -30px;
-  background: #d4e0f5;
+  background: #f0c8e8;
 }
 
 .my__auth-link {

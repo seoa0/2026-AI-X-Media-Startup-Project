@@ -9,94 +9,212 @@
   inset: 0;
   z-index: 0;
   overflow: hidden;
-  background: #F2ECF4;
+  background: #fff8f0;
   pointer-events: none;
 }
 
-.animated-gradient--auth .animated-gradient__canvas {
-  background: #F5ECF0;
+.animated-gradient__canvas--embedded {
+  position: absolute;
+  border-radius: inherit;
+}
+
+/* Slow-moving base gradient */
+.animated-gradient__base {
+  position: absolute;
+  inset: -60%;
+  background: var(--gradient-bg-animated);
+  background-size: 300% 300%;
+  animation: gradientShift 22s ease-in-out infinite;
+  will-change: background-position;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 40%;
+  }
+  33% {
+    background-position: 50% 60%;
+  }
+  66% {
+    background-position: 100% 30%;
+  }
+  100% {
+    background-position: 0% 40%;
+  }
 }
 
 .animated-gradient__orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(100px);
+  filter: blur(110px);
   will-change: transform;
-  opacity: 0.85;
+  opacity: 0.55;
+  mix-blend-mode: normal;
 }
 
 /* landing */
 .animated-gradient--landing .animated-gradient__orb--1 {
-  width: 80vmax;
-  height: 80vmax;
-  background: #DDD4F0;
-  top: -25%;
-  left: -20%;
-  animation: orbMove1 14s ease-in-out infinite;
+  width: 85vmax;
+  height: 85vmax;
+  background: rgba(255, 158, 32, 0.45);
+  top: -30%;
+  left: -22%;
+  animation: orbMove1 20s ease-in-out infinite;
 }
 
 .animated-gradient--landing .animated-gradient__orb--2 {
-  width: 75vmax;
-  height: 75vmax;
-  background: #F5DDE2;
-  top: 10%;
-  right: -30%;
-  animation: orbMove2 16s ease-in-out infinite;
+  width: 78vmax;
+  height: 78vmax;
+  background: rgba(212, 168, 232, 0.35);
+  top: 8%;
+  right: -32%;
+  animation: orbMove2 24s ease-in-out infinite;
 }
 
 .animated-gradient--landing .animated-gradient__orb--3 {
-  width: 70vmax;
-  height: 70vmax;
-  background: #F5EDD0;
-  bottom: -20%;
-  left: 10%;
-  animation: orbMove3 18s ease-in-out infinite;
+  width: 72vmax;
+  height: 72vmax;
+  background: rgba(255, 200, 128, 0.4);
+  bottom: -22%;
+  left: 8%;
+  animation: orbMove3 26s ease-in-out infinite;
 }
 
 .animated-gradient--landing .animated-gradient__orb--4 {
-  width: 65vmax;
-  height: 65vmax;
-  background: #D4EDE0;
-  bottom: 5%;
-  right: -15%;
-  animation: orbMove4 20s ease-in-out infinite;
+  width: 68vmax;
+  height: 68vmax;
+  background: rgba(232, 200, 240, 0.32);
+  bottom: 2%;
+  right: -18%;
+  animation: orbMove4 28s ease-in-out infinite;
 }
 
-/* auth */
+/* auth / home / packages */
 .animated-gradient--auth .animated-gradient__orb--1 {
-  width: 80vmax;
-  height: 80vmax;
-  background: #F0D4E4;
-  top: -20%;
-  left: -25%;
-  animation: orbMove1 14s ease-in-out infinite;
+  width: 82vmax;
+  height: 82vmax;
+  background: rgba(255, 158, 32, 0.42);
+  top: -22%;
+  left: -26%;
+  animation: orbMove1 20s ease-in-out infinite;
 }
 
 .animated-gradient--auth .animated-gradient__orb--2 {
-  width: 75vmax;
-  height: 75vmax;
-  background: #E4D4F0;
-  top: 15%;
-  right: -25%;
-  animation: orbMove2 16s ease-in-out infinite;
+  width: 76vmax;
+  height: 76vmax;
+  background: rgba(212, 168, 232, 0.32);
+  top: 12%;
+  right: -28%;
+  animation: orbMove2 24s ease-in-out infinite;
 }
 
 .animated-gradient--auth .animated-gradient__orb--3 {
   width: 70vmax;
   height: 70vmax;
-  background: #D4E0F5;
-  bottom: -15%;
-  left: 5%;
-  animation: orbMove3 18s ease-in-out infinite;
+  background: rgba(255, 184, 92, 0.38);
+  bottom: -18%;
+  left: 4%;
+  animation: orbMove3 26s ease-in-out infinite;
 }
 
 .animated-gradient--auth .animated-gradient__orb--4 {
-  width: 65vmax;
-  height: 65vmax;
-  background: #EDD4F0;
-  bottom: 0;
-  right: -10%;
-  animation: orbMove4 20s ease-in-out infinite;
+  width: 64vmax;
+  height: 64vmax;
+  background: rgba(224, 200, 240, 0.28);
+  bottom: -2%;
+  right: -12%;
+  animation: orbMove4 28s ease-in-out infinite;
+}
+
+/* landing / login / signup — soft bright background */
+.animated-gradient.landing .animated-gradient__canvas,
+.animated-gradient.login .animated-gradient__canvas,
+.animated-gradient.signup .animated-gradient__canvas {
+  background: #fffdfa;
+}
+
+.animated-gradient.landing .animated-gradient__base,
+.animated-gradient.login .animated-gradient__base,
+.animated-gradient.signup .animated-gradient__base {
+  background: var(--gradient-bg-auth-soft);
+  opacity: 0.55;
+}
+
+.animated-gradient.landing .animated-gradient__orb,
+.animated-gradient.login .animated-gradient__orb,
+.animated-gradient.signup .animated-gradient__orb {
+  opacity: 0.16;
+  filter: blur(140px);
+}
+
+.animated-gradient.landing .animated-gradient__orb--1,
+.animated-gradient.login .animated-gradient__orb--1,
+.animated-gradient.signup .animated-gradient__orb--1 {
+  background: rgba(255, 158, 32, 0.22);
+}
+
+.animated-gradient.landing .animated-gradient__orb--2,
+.animated-gradient.login .animated-gradient__orb--2,
+.animated-gradient.signup .animated-gradient__orb--2 {
+  background: rgba(212, 168, 232, 0.14);
+}
+
+.animated-gradient.landing .animated-gradient__orb--3,
+.animated-gradient.login .animated-gradient__orb--3,
+.animated-gradient.signup .animated-gradient__orb--3 {
+  background: rgba(255, 200, 128, 0.16);
+}
+
+.animated-gradient.landing .animated-gradient__orb--4,
+.animated-gradient.login .animated-gradient__orb--4,
+.animated-gradient.signup .animated-gradient__orb--4 {
+  background: rgba(232, 216, 244, 0.12);
+}
+
+/* chat — subtler, contained */
+.animated-gradient__canvas.animated-gradient--chat {
+  background: #fff8f0;
+}
+
+.animated-gradient--chat .animated-gradient__orb {
+  opacity: 0.42;
+  filter: blur(90px);
+}
+
+.animated-gradient--chat .animated-gradient__orb--1 {
+  width: 90vmax;
+  height: 90vmax;
+  background: rgba(255, 158, 32, 0.38);
+  top: -35%;
+  left: -30%;
+  animation: orbMove1 24s ease-in-out infinite;
+}
+
+.animated-gradient--chat .animated-gradient__orb--2 {
+  width: 80vmax;
+  height: 80vmax;
+  background: rgba(212, 168, 232, 0.28);
+  top: 20%;
+  right: -35%;
+  animation: orbMove2 28s ease-in-out infinite;
+}
+
+.animated-gradient--chat .animated-gradient__orb--3 {
+  width: 75vmax;
+  height: 75vmax;
+  background: rgba(255, 200, 128, 0.32);
+  bottom: -25%;
+  left: -5%;
+  animation: orbMove3 30s ease-in-out infinite;
+}
+
+.animated-gradient--chat .animated-gradient__orb--4 {
+  width: 70vmax;
+  height: 70vmax;
+  background: rgba(232, 216, 244, 0.25);
+  bottom: 5%;
+  right: -20%;
+  animation: orbMove4 32s ease-in-out infinite;
 }
 
 .animated-gradient__content {
@@ -109,8 +227,11 @@
   100% {
     transform: translate(0, 0) scale(1);
   }
-  50% {
-    transform: translate(12%, 10%) scale(1.08);
+  33% {
+    transform: translate(8%, 6%) scale(1.04);
+  }
+  66% {
+    transform: translate(-5%, 10%) scale(1.07);
   }
 }
 
@@ -119,8 +240,11 @@
   100% {
     transform: translate(0, 0) scale(1);
   }
-  50% {
-    transform: translate(-10%, 8%) scale(1.05);
+  33% {
+    transform: translate(-8%, 5%) scale(1.03);
+  }
+  66% {
+    transform: translate(6%, -8%) scale(1.06);
   }
 }
 
@@ -129,8 +253,11 @@
   100% {
     transform: translate(0, 0) scale(1);
   }
-  50% {
-    transform: translate(8%, -12%) scale(1.1);
+  33% {
+    transform: translate(6%, -10%) scale(1.05);
+  }
+  66% {
+    transform: translate(-8%, -4%) scale(1.08);
   }
 }
 
@@ -139,12 +266,16 @@
   100% {
     transform: translate(0, 0) scale(1);
   }
-  50% {
-    transform: translate(-8%, -6%) scale(0.95);
+  33% {
+    transform: translate(-6%, -4%) scale(0.97);
+  }
+  66% {
+    transform: translate(5%, 6%) scale(1.02);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .animated-gradient__base,
   .animated-gradient__orb {
     animation: none;
   }

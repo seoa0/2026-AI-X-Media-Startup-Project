@@ -14,6 +14,8 @@ export type ChatStep =
   | 'farewell'
   | 'done';
 
+export type VoiceOwner = 'self' | 'other' | 'ai';
+
 export type VoiceRecordSubStep = 'method' | 'read';
 
 export interface ChatChoice {
@@ -77,8 +79,9 @@ export const GIFT_TARGET_CHOICES: ChatChoice[] = [
 ];
 
 export const VOICE_OWNER_CHOICES: ChatChoice[] = [
-  { label: '지금까지 얘기한 나 자신', value: 'self' },
-  { label: '다른 사람의 목소리', value: 'other' },
+  { label: '자기 자신', value: 'self' },
+  { label: '타인 목소리', value: 'other' },
+  { label: '생성형 AI 목소리', value: 'ai' },
 ];
 
 export const VOICE_RECORD_METHOD_CHOICES: ChatChoice[] = [
@@ -247,7 +250,7 @@ ${input.giftTarget}께 선물드릴 거에요.`;
 export function getFarewellMessages() {
   return [
     '또비가 목소리를 가다듬는 중 . . .',
-    '또비가 노래를 만드는 데에는 최대 일주일이 걸려요.',
+    '또비가 노래를 만드는 데에는 최대 3일이 걸려요.',
     `준비가 되면 알람을 짹! 울려드려요.
 
 다시 만났을 때, 당신에게
@@ -357,8 +360,10 @@ export function pickReadSentence(story: string): string {
   return trimmed.length > 60 ? `${trimmed.slice(0, 60)}…` : trimmed;
 }
 
-export function getVoiceLabel(voiceOwner: 'self' | 'other'): string {
-  return voiceOwner === 'self' ? '지금까지 얘기한 나 자신' : '다른 사람';
+export function getVoiceLabel(voiceOwner: VoiceOwner): string {
+  if (voiceOwner === 'self') return '자기 자신';
+  if (voiceOwner === 'other') return '타인 목소리';
+  return '생성형 AI 목소리';
 }
 
 export function getChoicesForStep(
@@ -438,7 +443,7 @@ const PREVIOUS_STEP: Partial<Record<ChatStep, ChatStep>> = {
   summary: 'songTitle',
 };
 
-export function getPreviousStep(step: ChatStep, voiceOwner?: 'self' | 'other'): ChatStep | null {
+export function getPreviousStep(step: ChatStep, voiceOwner?: VoiceOwner): ChatStep | null {
   if (step === 'songTitle' && voiceOwner === 'other') return 'voiceRecord';
   if (step === 'summary' && voiceOwner === 'other') return 'songTitle';
   return PREVIOUS_STEP[step] ?? null;

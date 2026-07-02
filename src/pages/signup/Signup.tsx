@@ -9,6 +9,9 @@ import PageHeader from '../../shared/components/header/PageHeader';
 import { DEFAULT_EMAIL_DOMAIN, EMAIL_DOMAINS, type EmailDomain } from '../../shared/constants/emailDomains';
 import { validatePassword } from '../../shared/utils/passwordValidation';
 import { resetOnboarding } from '../../shared/utils/onboardingStorage';
+import SignupConsentFields from '../../shared/components/consent/SignupConsentFields';
+import { EMPTY_SIGNUP_CONSENTS, areRequiredConsentsChecked } from '../../shared/types/consent';
+import type { SignupConsents } from '../../shared/types/consent';
 import './Signup.css';
 
 export default function Signup() {
@@ -23,6 +26,7 @@ export default function Signup() {
   const [tempCustomDomain, setTempCustomDomain] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [consents, setConsents] = useState<SignupConsents>(EMPTY_SIGNUP_CONSENTS);
 
   const displayDomain = domain === '직접 입력' ? customDomain || '직접 입력' : domain;
 
@@ -50,6 +54,11 @@ export default function Signup() {
       return;
     }
 
+    if (!areRequiredConsentsChecked(consents)) {
+      setError('필수 약관에 모두 동의해 주세요.');
+      return;
+    }
+
     const resolvedDomain = domain === '직접 입력' ? customDomain : domain;
     const email = `${emailLocal}@${resolvedDomain}`;
 
@@ -60,7 +69,12 @@ export default function Signup() {
 
     setLoading(true);
     try {
-      await authApi.signup({ name: name.trim(), email, password });
+      await authApi.signup({
+        name: name.trim(),
+        email,
+        password,
+        consents: { ...consents, agreedAt: new Date().toISOString() },
+      });
       resetOnboarding();
       navigate('/onboarding/chat');
     } catch (err) {
@@ -125,7 +139,7 @@ export default function Signup() {
                 <span className="email-input__at">@</span>
                 <span className="email-input__domain">{displayDomain}</span>
                 <svg className="email-input__chevron" width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
-                  <path d="M1 1.5L6 6.5L11 1.5" stroke="#B8AED0" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M1 1.5L6 6.5L11 1.5" stroke="#C4A898" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
             </div>
@@ -161,7 +175,9 @@ export default function Signup() {
             <div className="underline-input__line" />
           </div>
 
-          <Button type="submit" variant="primary" layout="full" disabled={loading}>
+          <SignupConsentFields consents={consents} onChange={setConsents} />
+
+          <Button type="submit" variant="glass" layout="full" disabled={loading || !areRequiredConsentsChecked(consents)}>
             {loading ? '가입 중...' : '가입하기'}
           </Button>
           {error && <p className="signup__error">{error}</p>}
@@ -194,7 +210,7 @@ export default function Signup() {
                 </div>
               ))}
             </div>
-            <Button variant="primary" layout="full" onClick={() => setIsSheetOpen(false)}>
+            <Button variant="glass" layout="full" onClick={() => setIsSheetOpen(false)}>
               취소
             </Button>
           </div>

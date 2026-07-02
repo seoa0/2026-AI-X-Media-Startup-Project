@@ -1,0 +1,8 @@
+.animated-character {
+  position: relative;
+  z-index: 1;
+  width: min(200px, 52vw);
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 24px rgba(var(--color-primary-rgb), 0.15));
+}

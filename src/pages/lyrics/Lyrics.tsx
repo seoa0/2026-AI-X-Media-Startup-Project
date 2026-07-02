@@ -1,50 +1,47 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import Button from '../../shared/components/button/Button';
 import { songsApi } from '../../shared/apis/songs/songsApi';
 import CharacterChatLayout from '../../shared/components/chat/CharacterChatLayout';
-import VoiceConversationPanel from '../../shared/components/chat/VoiceConversationPanel';
-import VoiceRecorderBar from '../../shared/components/chat/VoiceRecorderBar';
 import BottomNav from '../../shared/components/nav/BottomNav';
-import { ASSISTANT_NAME } from '../../shared/constants/onboardingChat';
+import { canRegenerateLyrics, getPackageFeatures } from '../../shared/constants/packageFeatures';
 import { getPackageById } from '../../shared/constants/packages';
 import {
-  generateLyricsAssistantReply,
-  LYRICS_PHASE_MARKER,
-  LYRICS_START_MESSAGE,
-} from '../../shared/firebase/llmService';
-import { isSpeechRecognitionSupported, VoiceRecorder } from '../../shared/firebase/voiceService';
-import type { Song } from '../../shared/types/song';
-import { createChatId, formatChatTime, type ChatMessage, type VoiceSessionStatus } from '../../shared/types/chat';
+  LYRICS_REVISION_DONE_MESSAGE,
+  LYRICS_REVISION_STEPS,
+  MELODY_FLOW_DONE_MESSAGE,
+  MELODY_FLOW_STEPS,
+  getSampleLyrics,
+} from '../../shared/constants/lyricsFlow';
+import {
+  LYRICS_CONFIRM_MESSAGE,
+  LYRICS_REGEN_PAYWALL_MESSAGE,
+} from '../../shared/constants/productionFlow';
+import type { LyricsFlowPhase, Song, VideoTier, UpdateSongRequest } from '../../shared/types/song';
 import { isLoggedIn } from '../../shared/utils/authStorage';
 import { isIntroChatComplete } from '../../shared/utils/onboardingStorage';
+import { getSongRoute } from '../../shared/utils/songRoute';
+import LyricsFlowChat from './LyricsFlowChat';
+import VideoUpgradePanel from './VideoUpgradePanel';
+import './Lyrics.css';
 
-function hasLyricsPhaseStarted(messages: ChatMessage[]) {
-  return messages.some((m) => m.role === 'bot' && m.text.includes(LYRICS_PHASE_MARKER));
+function resolveInitialPhase(song: Song): LyricsFlowPhase {
+  if (song.lyricsFlowPhase && !song.lyricsConfirmedAt) {
+    return song.lyricsFlowPhase;
+  }
+  return 'preview';
 }
 
 export default function Lyrics() {
   const navigate = useNavigate();
   const { songId } = useParams<{ songId: string }>();
-  const voiceRecorderRef = useRef<VoiceRecorder | null>(null);
-  const lyricsIntroAdded = useRef(false);
 
   const [song, setSong] = useState<Song | null>(null);
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [status, setStatus] = useState<VoiceSessionStatus>('idle');
-  const [liveTranscript, setLiveTranscript] = useState('');
+  const [phase, setPhase] = useState<LyricsFlowPhase>('preview');
+  const [lyrics, setLyrics] = useState('');
   const [loading, setLoading] = useState(true);
-
-  const saveMessages = useCallback(async (nextMessages: ChatMessage[], currentSong: Song) => {
-    try {
-      const { data } = await songsApi.update(currentSong.id, {
-        messages: nextMessages,
-        step: '가사 작성 중',
-      });
-      setSong(data.song);
-    } catch {
-      // 오프라인 등 저장 실패 시 로컬 상태만 유지
-    }
-  }, []);
+  const [generating, setGenerating] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (!isLoggedIn()) {
@@ -63,94 +60,151 @@ export default function Lyrics() {
     songsApi
       .getById(songId)
       .then(async (res) => {
-        let nextMessages = res.data.song.messages;
+        const loaded = res.data.song;
 
-        if (!hasLyricsPhaseStarted(nextMessages) && !lyricsIntroAdded.current) {
-          lyricsIntroAdded.current = true;
-          const introMessage: ChatMessage = {
-            id: createChatId(),
-            role: 'bot',
-            text: LYRICS_START_MESSAGE,
-            time: formatChatTime(),
-            source: 'text',
-          };
-          nextMessages = [...nextMessages, introMessage];
-          const { data } = await songsApi.update(res.data.song.id, {
-            messages: nextMessages,
+        if (loaded.lyricsConfirmedAt) {
+          navigate(getSongRoute(loaded), { replace: true });
+          return;
+        }
+
+        if (!loaded.storySource) {
+          navigate(`/story-source/${loaded.id}`, { replace: true });
+          return;
+        }
+
+        if (loaded.storySource === 'new') {
+          const readyForLyrics = loaded.messages.some(
+            (m) => m.role === 'bot' && m.text.includes('가사 생성으로 넘어가'),
+          );
+          if (!readyForLyrics) {
+            navigate(`/create/${loaded.id}`, { replace: true });
+            return;
+          }
+        }
+
+        setSong(loaded);
+        setPhase(resolveInitialPhase(loaded));
+
+        if (loaded.generatedLyrics) {
+          setLyrics(loaded.generatedLyrics);
+          return;
+        }
+
+        setGenerating(true);
+        const generated = getSampleLyrics();
+        try {
+          const { data } = await songsApi.update(loaded.id, {
+            generatedLyrics: generated,
+            lyrics: generated,
             step: '가사 작성 중',
+            productionPhase: 'lyrics',
+            lyricsFlowPhase: 'preview',
           });
           setSong(data.song);
-          setMessages(nextMessages);
-        } else {
-          setSong(res.data.song);
-          setMessages(nextMessages);
+          setLyrics(generated);
+        } catch {
+          setLyrics(generated);
+        } finally {
+          setGenerating(false);
         }
       })
       .catch(() => navigate('/home', { replace: true }))
       .finally(() => setLoading(false));
   }, [navigate, songId]);
 
-  const handleToggleRecord = async () => {
-    if (!song || status === 'processing') return;
+  const persistPhase = async (nextPhase: LyricsFlowPhase, patch: UpdateSongRequest = {}) => {
+    if (!song) return;
+    try {
+      const { data } = await songsApi.update(song.id, {
+        lyricsFlowPhase: nextPhase,
+        ...patch,
+      });
+      setSong(data.song);
+    } catch {
+      setSong((prev) => (prev ? { ...prev, lyricsFlowPhase: nextPhase, ...patch } : prev));
+    }
+    setPhase(nextPhase);
+  };
 
-    if (!isSpeechRecognitionSupported()) {
-      alert('이 브라우저에서는 음성 인식을 지원하지 않습니다. Chrome을 사용해 주세요.');
+  const handleStartRevision = async () => {
+    if (!song || generating) return;
+
+    if (!canRegenerateLyrics(song.packageId, song.lyricsRegenCount)) {
+      alert(LYRICS_REGEN_PAYWALL_MESSAGE);
       return;
     }
 
-    if (status === 'listening') {
-      setStatus('processing');
-      const recorder = voiceRecorderRef.current;
-      voiceRecorderRef.current = null;
+    await persistPhase('revision');
+  };
 
-      const { transcript } = recorder ? await recorder.stop() : { transcript: '' };
-      const userText = transcript.trim();
-      setLiveTranscript('');
+  const handleRevisionComplete = async () => {
+    if (!song) return;
 
-      if (!userText) {
-        alert('말씀이 인식되지 않았습니다. 다시 시도해 주세요.');
-        setStatus('idle');
-        return;
-      }
-
-      const userMessage: ChatMessage = {
-        id: createChatId(),
-        role: 'user',
-        text: userText,
-        time: formatChatTime(),
-        source: 'voice',
-      };
-
-      const withUser = [...messages, userMessage];
-      setMessages(withUser);
-
-      const botText = await generateLyricsAssistantReply(withUser);
-      const botMessage: ChatMessage = {
-        id: createChatId(),
-        role: 'bot',
-        text: botText,
-        time: formatChatTime(),
-        source: 'text',
-      };
-
-      const nextMessages = [...withUser, botMessage];
-      setMessages(nextMessages);
-      await saveMessages(nextMessages, song);
-      setStatus('idle');
-      return;
-    }
-
-    const recorder = new VoiceRecorder();
-    voiceRecorderRef.current = recorder;
-    setLiveTranscript('');
-    setStatus('listening');
+    setGenerating(true);
+    const nextRegenCount = song.lyricsRegenCount + 1;
+    const generated = getSampleLyrics();
 
     try {
-      await recorder.start(setLiveTranscript);
+      const { data } = await songsApi.update(song.id, {
+        generatedLyrics: generated,
+        lyrics: generated,
+        lyricsRegenCount: nextRegenCount,
+        lyricsFlowPhase: 'preview',
+      });
+      setSong(data.song);
+      setLyrics(generated);
+      setPhase('preview');
     } catch {
-      voiceRecorderRef.current = null;
-      setStatus('idle');
-      alert('마이크 권한이 필요합니다. 브라우저 설정에서 허용해 주세요.');
+      setLyrics(generated);
+      setSong((prev) =>
+        prev
+          ? {
+              ...prev,
+              lyricsRegenCount: nextRegenCount,
+              generatedLyrics: generated,
+              lyrics: generated,
+              lyricsFlowPhase: 'preview',
+            }
+          : prev,
+      );
+      setPhase('preview');
+    } finally {
+      setGenerating(false);
+    }
+  };
+
+  const handleConfirmLyrics = async () => {
+    if (!song) return;
+    await persistPhase('melody');
+  };
+
+  const handleMelodyComplete = async () => {
+    await persistPhase('video_upgrade');
+  };
+
+  const handleVideoSelect = async (tier: VideoTier) => {
+    if (!song || submitting) return;
+    setSubmitting(true);
+
+    const { productionWaitMs } = getPackageFeatures(song.packageId);
+    const readyAt = new Date(Date.now() + productionWaitMs);
+    const melodySummary = '멜로디 방향 확정';
+
+    try {
+      await songsApi.update(song.id, {
+        lyricsConfirmedAt: new Date().toISOString(),
+        productionReadyAt: readyAt.toISOString(),
+        productionPhase: 'production',
+        step: '멜로디 생성 중',
+        progress: 60,
+        lyricsFlowPhase: null,
+        videoTier: tier,
+        melody: melodySummary,
+      });
+      navigate(`/production/waiting/${song.id}`);
+    } catch {
+      alert('저장에 실패했습니다. 다시 시도해 주세요.');
+      setSubmitting(false);
     }
   };
 
@@ -163,30 +217,82 @@ export default function Lyrics() {
   }
 
   const selectedPackage = song.packageId ? getPackageById(song.packageId) : null;
-  const subtitle = selectedPackage ? `${selectedPackage.title} · 가사 작성` : '2. 가사 작성';
+  const packageLabel = selectedPackage?.title ?? '';
+
+  if (phase === 'revision') {
+    return (
+      <LyricsFlowChat
+        title={song.title}
+        subtitle={packageLabel ? `${packageLabel} · 가사 수정` : '가사 수정'}
+        steps={LYRICS_REVISION_STEPS}
+        doneMessage={LYRICS_REVISION_DONE_MESSAGE}
+        onBack={() => setPhase('preview')}
+        onComplete={() => {
+          handleRevisionComplete();
+        }}
+      />
+    );
+  }
+
+  if (phase === 'melody') {
+    return (
+      <LyricsFlowChat
+        title={song.title}
+        subtitle={packageLabel ? `${packageLabel} · 멜로디 방향` : '멜로디 방향'}
+        steps={MELODY_FLOW_STEPS}
+        doneMessage={MELODY_FLOW_DONE_MESSAGE}
+        onBack={() => setPhase('preview')}
+        onComplete={() => {
+          handleMelodyComplete();
+        }}
+      />
+    );
+  }
+
+  if (phase === 'video_upgrade') {
+    return (
+      <VideoUpgradePanel
+        title={song.title}
+        subtitle={packageLabel ? `${packageLabel} · 영상 선택` : '영상 선택'}
+        onBack={() => setPhase('melody')}
+        onSelect={handleVideoSelect}
+        submitting={submitting}
+      />
+    );
+  }
+
+  const regensLeft = getPackageFeatures(song.packageId).freeLyricsRegens - song.lyricsRegenCount;
+  const regenLabel =
+    regensLeft > 0 ? `다시 만들기 (무료 ${regensLeft}회)` : '다시 만들기 (결제 필요)';
 
   return (
     <CharacterChatLayout
       title={song.title}
-      subtitle={subtitle}
+      subtitle={packageLabel ? `${packageLabel} · 1. 가사 생성` : '1. 가사 생성'}
       onBack={() => navigate('/home')}
       footer={
-        <VoiceRecorderBar
-          status={status}
-          disabled={loading}
-          onToggleRecord={handleToggleRecord}
-        />
+        <div className="lyrics__footer">
+          <Button
+            variant="white"
+            layout="full"
+            className="lyrics__regen-btn"
+            onClick={handleStartRevision}
+            disabled={generating || submitting}
+          >
+            {generating ? '가사 생성 중...' : regenLabel}
+          </Button>
+          <Button variant="primary" layout="full" onClick={handleConfirmLyrics} disabled={generating || submitting}>
+            이 가사로 확정
+          </Button>
+        </div>
       }
       showBottomNav
       bottomNav={<BottomNav />}
     >
-      <VoiceConversationPanel
-        messages={messages}
-        status={status}
-        liveTranscript={liveTranscript}
-        assistantName={ASSISTANT_NAME}
-        defaultBotText="가사에 담고 싶은 내용을 말씀해 주세요."
-      />
+      <div className="lyrics__panel">
+        <p className="lyrics__guide">{LYRICS_CONFIRM_MESSAGE}</p>
+        <pre className="lyrics__preview">{generating ? '가사를 만들고 있어요...' : lyrics}</pre>
+      </div>
     </CharacterChatLayout>
   );
 }

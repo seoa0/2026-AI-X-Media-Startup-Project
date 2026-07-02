@@ -4,6 +4,73 @@
   --font-body: 'Line Seed KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-title: 'NEXON Lv1 Gothic', 'Line Seed KR', sans-serif;
   --font-scale: 1;
+
+  /* Brand — #FF9E20 orange with soft lavender blend */
+  --color-primary: #ff9e20;
+  --color-primary-dark: #e88a10;
+  --color-primary-light: #ffb85c;
+  --color-primary-rgb: 255, 158, 32;
+  --color-accent-purple: #d4a8e8;
+  --color-accent-purple-light: #ede0f8;
+
+  --gradient-brand: linear-gradient(
+    100deg,
+    #ff9e20 0%,
+    #ffb85c 42%,
+    #f0c8e0 78%,
+    #e0c8f0 100%
+  );
+  --gradient-brand-h: var(--color-primary);
+  --gradient-mic: var(--color-primary);
+  --gradient-mic-alt: linear-gradient(135deg, #ffc680 0%, #ff9e20 55%, #d4a8e8 100%);
+  --gradient-bg-auth-soft: linear-gradient(
+    135deg,
+    #fffdfa 0%,
+    #fff8f2 30%,
+    #fff5ee 60%,
+    #fff9f6 100%
+  );
+  --gradient-bg-animated: linear-gradient(
+    135deg,
+    #fff8f0 0%,
+    #ffe8cc 18%,
+    #ffd8a8 35%,
+    #ffe0c8 52%,
+    #f0dce8 68%,
+    #e8d8f4 82%,
+    #fff5ee 100%
+  );
+
+  --bg-page-start: #fff8f0;
+  --bg-page-mid: #fff0e0;
+  --bg-page-end: #f5e8f4;
+  --bg-chat: linear-gradient(
+    180deg,
+    #fff8f0 0%,
+    #fff2e4 45%,
+    #ffe8d4 75%,
+    #f5e8f4 100%
+  );
+
+  --color-text-primary: #2d3142;
+  --color-text-muted: #c4a898;
+  --color-input-line: #f5dcc8;
+  --color-border-soft: rgba(255, 158, 32, 0.32);
+  --color-user-text: #e88a10;
+  --color-user-border: #ffd8a8;
+  --color-speaker: #ff9e20;
+  --color-typing-dot: #ffc680;
+  --color-wave: #ffb85c;
+  --color-choice-border: rgba(255, 184, 92, 0.45);
+  --color-selected-bg: #fff0e0;
+  --color-selected-text: #ff9e20;
+  --color-badge-bg: rgba(255, 158, 32, 0.12);
+  --color-badge-text: #c87810;
+  --color-link: #ff9e20;
+  --color-highlight: #ffb85c;
+  --color-glass-shadow: rgba(255, 158, 32, 0.16);
+  --color-fade-purple: rgba(245, 232, 244, 0.92);
+  --color-fade-orange: rgba(255, 248, 240, 0.92);
 }
 
 html[data-font-size='small'] {

@@ -1,4 +1,5 @@
 import type { ChatMessage } from '../types/chat';
+import { APP_NAME } from '../constants/brand';
 import {
   getFallbackAck,
   getFallbackOnboardingReply,
@@ -157,7 +158,7 @@ export async function generateMusicAssistantReply(
       .filter(Boolean)
       .join('\n');
 
-    const systemInstruction = `당신은 '나도 가수다' AI 뮤직 메이트입니다. 존댓말. 2~3문장. 이모지 최대 1개.\n${contextLines}`;
+    const systemInstruction = `당신은 '${APP_NAME}' AI 뮤직 메이트입니다. 존댓말. 2~3문장. 이모지 최대 1개.\n${contextLines}`;
 
     const text = await callGeminiChat(messages, systemInstruction, lastUser.text);
     if (text) return text;
@@ -203,7 +204,7 @@ export async function generateLyricsAssistantReply(messages: ChatMessage[]): Pro
 
   try {
     const systemInstruction =
-      "당신은 '나도 가수다' AI 뮤직 메이트입니다. 가사 작성 단계입니다. 존댓말. 2~3문장. 이모지 최대 1개.";
+      `당신은 '${APP_NAME}' AI 뮤직 메이트입니다. 가사 작성 단계입니다. 존댓말. 2~3문장. 이모지 최대 1개.`;
     const text = await callGeminiChat(messages, systemInstruction, lastUser.text);
     if (text) return text;
   } catch (error) {
@@ -229,7 +230,7 @@ export async function generateOnboardingTransition(
 1. 공감 한 문장 (존댓말) 2. 이어서 질문: "${nextQuestion}" — 총 2문장 이내. 이모지 금지.`;
 
     const text = await callGeminiPrompt(
-      `당신은 '나도 가수다' AI 뮤직 메이트입니다. 온보딩 대화를 진행합니다.`,
+      `당신은 '${APP_NAME}' AI 뮤직 메이트입니다. 온보딩 대화를 진행합니다.`,
       prompt,
     );
     if (text) return text;
@@ -252,7 +253,7 @@ export async function generateOnboardingAck(
 
   try {
     const prompt = `사용자 답변: "${userAnswer}" — 공감 한 문장만. 질문 금지. 존댓말.`;
-    const text = await callGeminiPrompt(`당신은 '나도 가수다' AI 뮤직 메이트입니다.`, prompt);
+    const text = await callGeminiPrompt(`당신은 '${APP_NAME}' AI 뮤직 메이트입니다.`, prompt);
     if (text) return text.replace(/\n+/g, ' ');
   } catch (error) {
     markLlmUnavailable(error);

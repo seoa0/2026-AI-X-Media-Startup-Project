@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { APP_NAME } from '../../shared/constants/brand';
 import { useNavigate } from 'react-router-dom';
 import { navArrowRightIcon } from '../../shared/assets/icons';
 import { logoImage } from '../../shared/assets';
@@ -12,6 +13,7 @@ import { isLoggedIn } from '../../shared/utils/authStorage';
 import { isOnboardingComplete } from '../../shared/utils/onboardingStorage';
 import { getRedirectIfNoActiveProduction } from '../../shared/utils/productionGuard';
 import { getHomeGuardRedirect } from '../../shared/utils/routeGuard';
+import { getSongRoute } from '../../shared/utils/songRoute';
 import './Home.css';
 
 export default function Home() {
@@ -63,13 +65,13 @@ export default function Home() {
     <AnimatedGradientBackground variant="auth" className="home">
       <div className="home__content">
         <div className="home__logo-wrap">
-          <img src={logoImage} alt="나도 가수다" className="home__logo" />
+          <img src={logoImage} alt={APP_NAME} className="home__logo" />
         </div>
 
         <BannerCarousel />
 
         <Button
-          variant="glass"
+          variant="primary"
           layout="full"
           className="home__create-btn"
           onClick={handleCreateClick}
@@ -93,9 +95,9 @@ export default function Home() {
                     className="home__song-card"
                     role="button"
                     tabIndex={0}
-                    onClick={() => navigate(`/create/${song.id}`)}
+                    onClick={() => navigate(getSongRoute(song))}
                     onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') navigate(`/create/${song.id}`);
+                      if (e.key === 'Enter' || e.key === ' ') navigate(getSongRoute(song));
                     }}
                   >
                     <div className="home__song-info">

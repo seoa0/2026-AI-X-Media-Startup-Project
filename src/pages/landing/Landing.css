@@ -1,4 +1,6 @@
 .landing__content {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   min-height: 100dvh;
@@ -7,6 +9,42 @@
   margin: 0 auto;
   padding: 60px 28px 40px;
   overflow-x: hidden;
+}
+
+.landing__lp-wrap {
+  position: fixed;
+  left: -42%;
+  top: 50%;
+  z-index: 0;
+  width: min(72vw, 300px);
+  aspect-ratio: 1;
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.landing__lp {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  animation: landing-lp-spin 10s linear infinite;
+  filter: drop-shadow(0 12px 32px rgba(45, 49, 66, 0.12));
+}
+
+@keyframes landing-lp-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing__lp {
+    animation: none;
+  }
 }
 
 .landing__hero {
@@ -35,6 +73,29 @@
 }
 
 
+.landing__tagline-highlight {
+  color: var(--color-primary);
+}
+
+.landing__marker-highlight {
+  position: relative;
+  display: inline-block;
+  font-weight: 700;
+  color: #2d3142;
+}
+
+.landing__marker-highlight::after {
+  content: '';
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  bottom: 4px;
+  height: 0.45em;
+  background: rgba(255, 158, 32, 0.42);
+  z-index: -1;
+  border-radius: 4px;
+}
+
 .landing__promo {
   margin-bottom: 20px;
 }
@@ -50,7 +111,7 @@
 }
 
 .landing__promo-highlight {
-  color: #9DA8E8;
+  color: var(--color-highlight);
 }
 
 .landing__actions {
@@ -70,7 +131,7 @@
 }
 
 .landing__terms-link {
-  color: #7B9FD4;
+  color: var(--color-link);
   text-decoration: none;
 }
 

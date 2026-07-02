@@ -2,13 +2,7 @@
   min-height: 100dvh;
   max-width: 430px;
   margin: 0 auto;
-  background: linear-gradient(
-    180deg,
-    #eef3fb 0%,
-    #e9eef8 35%,
-    #ebe6f6 70%,
-    #ede8f8 100%
-  );
+  background: var(--bg-chat);
   color: #2d3142;
 }
 
@@ -41,7 +35,7 @@
   background: rgba(255, 255, 255, 0.78);
   border: 1px solid rgba(255, 255, 255, 0.92);
   border-radius: 18px;
-  box-shadow: 0 6px 20px rgba(139, 127, 212, 0.08);
+  box-shadow: 0 6px 20px rgba(var(--color-primary-rgb), 0.08);
 }
 
 .font-size-settings__preview-title {

@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react';
-import { characterImage } from '../../assets';
+import type { CharacterMotionMode } from '../../assets/characterMotion';
+import AnimatedCharacter from './AnimatedCharacter';
 import ChatPageHeader from '../header/ChatPageHeader';
 import './CharacterChatLayout.css';
 
@@ -12,6 +13,7 @@ interface CharacterChatLayoutProps {
   footer?: ReactNode;
   showBottomNav?: boolean;
   bottomNav?: ReactNode;
+  characterMotion?: CharacterMotionMode;
 }
 
 export default function CharacterChatLayout({
@@ -23,6 +25,7 @@ export default function CharacterChatLayout({
   footer,
   showBottomNav = false,
   bottomNav,
+  characterMotion = 'idle',
 }: CharacterChatLayoutProps) {
   const [bottomNavVisible, setBottomNavVisible] = useState(false);
 
@@ -39,7 +42,7 @@ export default function CharacterChatLayout({
 
       <div className="character-chat__main" onClick={handleMainTap}>
         <div className="character-chat__character-wrap">
-          <img src={characterImage} alt="" className="character-chat__character" draggable={false} />
+          <AnimatedCharacter mode={characterMotion} className="character-chat__character" />
         </div>
 
         <div className="character-chat__chat-area">

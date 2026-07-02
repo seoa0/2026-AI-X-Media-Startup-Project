@@ -6,6 +6,7 @@ import ChatPageHeader from '../../shared/components/header/ChatPageHeader';
 import type { Song } from '../../shared/types/song';
 import { isLoggedIn } from '../../shared/utils/authStorage';
 import { restartOnboardingChat } from '../../shared/utils/onboardingStorage';
+import { getSongRoute } from '../../shared/utils/songRoute';
 import './ProductionList.css';
 
 function DeleteIcon() {
@@ -80,9 +81,9 @@ export default function ProductionList() {
                 className="production-list__card"
                 role="button"
                 tabIndex={0}
-                onClick={() => navigate(`/create/${song.id}`)}
+                onClick={() => navigate(getSongRoute(song))}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') navigate(`/create/${song.id}`);
+                  if (e.key === 'Enter' || e.key === ' ') navigate(getSongRoute(song));
                 }}
               >
                 <div className="production-list__card-top">

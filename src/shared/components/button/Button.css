@@ -21,15 +21,16 @@
 
 .btn--primary {
   color: #fff;
-  background:
-    linear-gradient(85deg, #8B7FD4 0%, #A8B8E8 100%) padding-box,
-    linear-gradient(100deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.3) 100%) border-box;
+  background: #ff9e20;
+  border-color: #ff9e20;
+  background-clip: padding-box;
 }
 
 .btn--white {
   color: #2D3142;
   background:
     #fff padding-box,
+    linear-gradient(100deg, rgba(250, 250, 250, 0.3) 0%, rgba(255, 255, 255, 0.1) 50%, rgba(253, 253, 253, 0.3) 100%) border-box;
 }
 
 .btn--ghost {
@@ -46,15 +47,15 @@
   position: relative;
   overflow: hidden;
   color: #2d3142;
-  background: rgba(255, 255, 255, 0.38);
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  background: rgba(255, 255, 255, 0.58);
   background-clip: border-box;
-  border: 1px solid rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   box-shadow:
-    0 8px 28px rgba(139, 127, 212, 0.18),
-    inset 0 1px 0 rgba(255, 255, 255, 0.85),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.25);
+    0 8px 28px rgba(45, 49, 66, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.35);
   transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
 }
 
@@ -62,21 +63,29 @@
   content: '';
   position: absolute;
   inset: 0;
+  border-radius: inherit;
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.55) 0%,
-    rgba(255, 255, 255, 0.05) 45%,
-    rgba(168, 184, 232, 0.18) 100%
+    rgba(255, 255, 255, 0.75) 0%,
+    rgba(255, 255, 255, 0.22) 48%,
+    rgba(255, 255, 255, 0.06) 100%
   );
   pointer-events: none;
 }
 
 .btn--glass:active {
+  opacity: 1;
   transform: scale(0.98);
-  background: rgba(255, 255, 255, 0.48);
+  background: rgba(255, 255, 255, 0.68);
   box-shadow:
-    0 4px 16px rgba(139, 127, 212, 0.14),
-    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+    0 4px 16px rgba(45, 49, 66, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+.btn--glass:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .btn__arrow {

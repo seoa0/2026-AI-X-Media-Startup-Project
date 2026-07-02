@@ -28,7 +28,7 @@
 .underline-input__label {
   font-size: calc(13px * var(--font-scale));
   font-weight: 700;
-  color: #B8AED0;
+  color: var(--color-text-muted);
 }
 
 .underline-input__field {
@@ -43,11 +43,11 @@
 }
 
 .underline-input__field::placeholder {
-  color: #B8AED0;
+  color: var(--color-text-muted);
   font-size: calc(15px * var(--font-scale));
 }
 
 .underline-input__line {
   height: 1px;
-  background: #D4CCE8;
+  background: var(--color-input-line);
 }

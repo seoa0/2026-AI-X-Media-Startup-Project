@@ -7,6 +7,7 @@ import {
 } from 'firebase/auth';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import type { User } from '../types/user';
+import type { StoredSignupConsents } from '../types/consent';
 import { auth, db } from './config';
 import { withTimeout } from './withTimeout';
 
@@ -100,7 +101,12 @@ export async function firebaseLogin(email: string, password: string) {
   return { user };
 }
 
-export async function firebaseSignup(email: string, password: string, name: string) {
+export async function firebaseSignup(
+  email: string,
+  password: string,
+  name: string,
+  consents?: StoredSignupConsents,
+) {
   const normalizedEmail = email.trim().toLowerCase();
   const trimmedName = name.trim();
   const credential = await createUserWithEmailAndPassword(auth, normalizedEmail, password);
@@ -112,6 +118,7 @@ export async function firebaseSignup(email: string, password: string, name: stri
         name: trimmedName,
         email: normalizedEmail,
         onboarding: null,
+        consents: consents ?? null,
         createdAt: now,
         updatedAt: now,
       }),

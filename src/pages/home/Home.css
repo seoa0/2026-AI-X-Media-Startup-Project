@@ -35,6 +35,7 @@
   border-radius: 20px;
   font-size: calc(16px * var(--font-scale));
   letter-spacing: -0.02em;
+  justify-content: space-between;
 }
 
 .home__create-btn-text {
@@ -50,20 +51,14 @@
   justify-content: center;
   width: 30px;
   height: 30px;
-  background: rgba(255, 255, 255, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.45);
   border-radius: 50%;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow:
-    0 2px 8px rgba(139, 127, 212, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 .home__create-btn-arrow img {
   display: block;
-  color: #7b6fd4;
-  filter: brightness(0) saturate(100%) invert(45%) sepia(30%) saturate(800%) hue-rotate(210deg) brightness(95%);
+  filter: brightness(0) invert(1);
 }
 
 .home__section-title {
@@ -124,7 +119,7 @@
 
 .home__song-progress-bar {
   height: 100%;
-  background: linear-gradient(90deg, #8b7fd4, #a8b8e8);
+  background: var(--gradient-brand-h);
   border-radius: 999px;
   transition: width 0.3s;
 }

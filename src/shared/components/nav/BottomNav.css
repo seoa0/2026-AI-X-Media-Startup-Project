@@ -43,7 +43,7 @@
 }
 
 .bottom-nav__item--active {
-  color: #7b6fd4;
+  color: var(--color-primary);
   font-weight: 700;
 }
 
@@ -55,7 +55,7 @@
 
 .bottom-nav__item--active .bottom-nav__icon {
   opacity: 1;
-  filter: brightness(0) saturate(100%) invert(45%) sepia(30%) saturate(800%) hue-rotate(210deg) brightness(95%);
+  filter: brightness(0) saturate(100%) invert(58%) sepia(78%) saturate(1200%) hue-rotate(360deg) brightness(102%);
 }
 
 .bottom-nav__item:active {

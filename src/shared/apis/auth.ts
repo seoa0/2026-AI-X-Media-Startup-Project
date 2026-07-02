@@ -5,6 +5,7 @@ import {
   firebaseSignup,
   firebaseSyncOnboarding,
 } from '../firebase/authService';
+import type { StoredSignupConsents } from '../types/consent';
 
 export interface LoginRequest {
   email: string;
@@ -15,6 +16,7 @@ export interface SignupRequest {
   name: string;
   email: string;
   password: string;
+  consents?: StoredSignupConsents;
 }
 
 export const authApi = {
@@ -24,7 +26,7 @@ export const authApi = {
   },
 
   signup: async (data: SignupRequest) => {
-    const result = await firebaseSignup(data.email, data.password, data.name);
+    const result = await firebaseSignup(data.email, data.password, data.name, data.consents);
     return { data: { token: '', user: result.user } };
   },
 

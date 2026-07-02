@@ -1,3 +1,5 @@
+import type { VoiceOwner } from '../constants/onboardingChat';
+
 const STORAGE_KEY = 'naneun-gasuda-onboarding';
 
 export interface OnboardingData {
@@ -11,7 +13,7 @@ export interface OnboardingData {
   preferredGenre?: string;
   selectedGenre?: string;
   giftTarget?: string;
-  voiceOwner?: 'self' | 'other';
+  voiceOwner?: VoiceOwner;
   selectedPackageId?: string;
 }
 

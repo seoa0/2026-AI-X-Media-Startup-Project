@@ -15,6 +15,7 @@ interface VoiceConversationPanelProps {
   pendingVoiceText?: string | null;
   statusLabels?: Partial<Record<VoiceSessionStatus, string>>;
   exampleHint?: string | null;
+  choicesClassName?: string;
 }
 
 const STATUS_LABEL: Record<VoiceSessionStatus, string> = {
@@ -44,6 +45,7 @@ export default function VoiceConversationPanel({
   pendingVoiceText = null,
   statusLabels,
   exampleHint = null,
+  choicesClassName = '',
 }: VoiceConversationPanelProps) {
   const listEndRef = useRef<HTMLDivElement>(null);
 
@@ -124,7 +126,7 @@ export default function VoiceConversationPanel({
       </div>
 
       {showChoices && (
-        <div className="voice-conversation__choices">
+        <div className={`voice-conversation__choices${choicesClassName ? ` ${choicesClassName}` : ''}`}>
           {choices.map((choice) => (
             <button
               key={choice.value}

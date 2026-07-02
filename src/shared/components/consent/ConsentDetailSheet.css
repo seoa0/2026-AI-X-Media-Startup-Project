@@ -1,0 +1,57 @@
+.consent-sheet-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(2px);
+}
+
+.consent-sheet {
+  width: 100%;
+  max-width: 430px;
+  max-height: 85dvh;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 16px 28px;
+  border-radius: 20px 20px 0 0;
+  background: rgba(255, 255, 255, 0.98);
+  animation: consentSheetUp 0.25s ease-out;
+}
+
+@keyframes consentSheetUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.consent-sheet__title {
+  margin: 0 0 12px;
+  font-family: var(--font-heading);
+  font-size: calc(17px * var(--font-scale));
+  color: #2d3142;
+}
+
+.consent-sheet__body {
+  flex: 1;
+  min-height: 0;
+  margin-bottom: 16px;
+  overflow-y: auto;
+}
+
+.consent-sheet__content {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: calc(13px * var(--font-scale));
+  line-height: 1.65;
+  color: rgba(45, 49, 66, 0.82);
+  white-space: pre-wrap;
+  word-break: keep-all;
+}

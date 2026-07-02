@@ -32,7 +32,7 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #9da8e8;
+  background: var(--color-wave);
 }
 
 .voice-conversation__status[data-status='listening'] .voice-conversation__status-dot {
@@ -41,7 +41,7 @@
 }
 
 .voice-conversation__status[data-status='processing'] .voice-conversation__status-dot {
-  background: #9da8e8;
+  background: var(--color-wave);
   animation: voice-pulse 0.8s ease-in-out infinite;
 }
 
@@ -71,13 +71,13 @@
   font-family: var(--font-body);
   font-size: calc(11px * var(--font-scale));
   font-weight: 700;
-  color: #9da8e8;
+  color: var(--color-speaker);
   letter-spacing: 0.04em;
 }
 
 .voice-chat__speaker--user {
   text-align: right;
-  color: rgba(123, 111, 212, 0.85);
+  color: rgba(217, 118, 56, 0.85);
 }
 
 .voice-chat__group {
@@ -116,15 +116,15 @@
 }
 
 .voice-chat__bubble--user {
-  color: #7b6fd4;
+  color: var(--color-user-text);
   background: #fff;
-  border: 1.5px solid #b8c4f0;
-  box-shadow: 0 2px 12px rgba(139, 127, 212, 0.1);
+  border: 1.5px solid var(--color-user-border);
+  box-shadow: 0 2px 12px rgba(var(--color-primary-rgb), 0.1);
 }
 
 .voice-chat__bubble--live {
   min-width: 48px;
-  color: rgba(123, 111, 212, 0.7);
+  color: rgba(217, 118, 56, 0.7);
   font-style: italic;
 }
 
@@ -140,7 +140,7 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #b8c4f0;
+  background: var(--color-typing-dot);
   animation: voice-typing 1.2s ease-in-out infinite;
 }
 
@@ -184,7 +184,7 @@
   display: block;
   width: 4px;
   height: 10px;
-  background: #9da8e8;
+  background: var(--color-wave);
   border-radius: 2px;
   animation: voice-wave 0.9s ease-in-out infinite;
 }
@@ -202,6 +202,11 @@
   padding-top: 4px;
 }
 
+.voice-conversation__choices--spacious {
+  padding-bottom: 28px;
+  margin-bottom: 12px;
+}
+
 .voice-conversation__choice {
   padding: 12px 18px;
   font-family: var(--font-body);
@@ -209,7 +214,7 @@
   font-weight: 700;
   color: #2d3142;
   background: #fff;
-  border: 1px solid rgba(157, 168, 232, 0.45);
+  border: 1px solid var(--color-choice-border);
   border-radius: 999px;
   box-shadow: 0 2px 10px rgba(45, 49, 66, 0.06);
   cursor: pointer;

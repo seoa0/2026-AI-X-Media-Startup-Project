@@ -4,6 +4,7 @@ import { songsApi } from '../../shared/apis/songs/songsApi';
 import PackageCard from '../../shared/components/package/PackageCard';
 import BottomNav from '../../shared/components/nav/BottomNav';
 import { logoImage } from '../../shared/assets';
+import { APP_NAME } from '../../shared/constants/brand';
 import AnimatedGradientBackground from '../../shared/styles/AnimatedGradientBackground/AnimatedGradientBackground';
 import { PACKAGES } from '../../shared/constants/packages';
 import { isLoggedIn } from '../../shared/utils/authStorage';
@@ -57,7 +58,7 @@ export default function PackageSelect() {
         packageId,
         title: songTitle?.trim() || undefined,
       });
-      navigate(`/create/${data.song.id}`);
+      navigate(`/story-source/${data.song.id}`);
     } catch {
       alert('곡 생성에 실패했습니다. 다시 시도해주세요.');
       setSubmitting(false);
@@ -69,7 +70,7 @@ export default function PackageSelect() {
       <div className="package-select__tap-area" onClick={handleBackgroundTap}>
         <header className="package-select__header">
           <div className="package-select__logo-wrap">
-            <img src={logoImage} alt="나도 가수다" className="package-select__logo" />
+            <img src={logoImage} alt={APP_NAME} className="package-select__logo" />
           </div>
           <p className="package-select__subtitle">원하는 플랜을 선택해주세요</p>
         </header>

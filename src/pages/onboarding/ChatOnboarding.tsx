@@ -33,6 +33,7 @@ import {
   stepUsesMic,
   type ChatChoice,
   type ChatStep,
+  type VoiceOwner,
   type VoiceRecordSubStep,
 } from '../../shared/constants/onboardingChat';
 import { isSpeechRecognitionSupported, VoiceRecorder } from '../../shared/firebase/voiceService';
@@ -43,6 +44,8 @@ import {
   saveOnboardingData,
 } from '../../shared/utils/onboardingStorage';
 import { syncOnboardingToServer } from '../../shared/utils/syncOnboarding';
+import { useBotMotionPulse } from '../../shared/hooks/useBotMotionPulse';
+import { resolveCharacterMotionMode } from '../../shared/utils/characterMotionMode';
 import './ChatOnboarding.css';
 
 interface Answers {
@@ -51,7 +54,7 @@ interface Answers {
   storyParts: string[];
   selectedGenre: string;
   giftTarget: string;
-  voiceOwner: 'self' | 'other';
+  voiceOwner: VoiceOwner;
   songTitle: string;
 }
 
@@ -90,6 +93,13 @@ export default function ChatOnboarding() {
   const [readSentence, setReadSentence] = useState('');
 
   const fullStory = answers.storyParts.join('\n');
+  const botAnimating = useBotMotionPulse(messages);
+  const characterMotion = resolveCharacterMotionMode({
+    status,
+    step,
+    chatComplete: step === 'done',
+    botAnimating,
+  });
 
   const appendMessage = useCallback((role: ChatMessage['role'], text: string, source: ChatMessage['source'] = 'text') => {
     setMessages((prev) => [
@@ -238,7 +248,7 @@ export default function ChatOnboarding() {
     restoreStepChoices('songTitle');
   };
 
-  const goToSummary = (voiceOwner: 'self' | 'other', songTitle: string) => {
+  const goToSummary = (voiceOwner: VoiceOwner, songTitle: string) => {
     const genre = answers.selectedGenre || finalGenres[0] || '발라드';
     const story = fullStory || '당신만의 이야기';
     const gift = answers.giftTarget || '자기 자신';
@@ -264,7 +274,7 @@ export default function ChatOnboarding() {
     goToSummary(answers.voiceOwner, value);
   };
 
-  const submitVoiceOwner = (value: 'self' | 'other', label: string, source: ChatMessage['source']) => {
+  const submitVoiceOwner = (value: VoiceOwner, label: string, source: ChatMessage['source']) => {
     appendMessage('user', label, source);
     setAnswers((prev) => ({ ...prev, voiceOwner: value }));
     saveOnboardingData({ voiceOwner: value });
@@ -309,6 +319,9 @@ export default function ChatOnboarding() {
     setStep('done');
     completeIntroChat();
     await syncOnboardingToServer();
+    await new Promise<void>((resolve) => {
+      window.setTimeout(resolve, 1400);
+    });
     navigate('/packages');
   };
 
@@ -431,7 +444,7 @@ export default function ChatOnboarding() {
       return;
     }
     if (step === 'voiceOwner') {
-      submitVoiceOwner(choice.value as 'self' | 'other', choice.label, 'text');
+      submitVoiceOwner(choice.value as VoiceOwner, choice.label, 'text');
       return;
     }
     if (step === 'voiceRecord') {
@@ -537,6 +550,7 @@ export default function ChatOnboarding() {
     <CharacterChatLayout
       title="나만의 노래 제작"
       subtitle={getSubtitleForStep(step)}
+      characterMotion={characterMotion}
       footer={
         step !== 'done' && step !== 'farewell' ? (
           <>

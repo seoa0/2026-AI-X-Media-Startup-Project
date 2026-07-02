@@ -1,0 +1,128 @@
+.signup-consent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(240, 212, 200, 0.8);
+}
+
+.signup-consent__all {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(240, 212, 200, 0.7);
+  cursor: pointer;
+}
+
+.signup-consent__all-label {
+  font-family: var(--font-body);
+  font-size: calc(15px * var(--font-scale));
+  font-weight: 700;
+  color: #2d3142;
+}
+
+.signup-consent__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.signup-consent__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.signup-consent__row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.signup-consent__checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  flex-shrink: 0;
+  border: 1.5px solid rgba(255, 158, 32, 0.45);
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.signup-consent__checkbox:checked {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.signup-consent__checkbox:checked::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 1px;
+  width: 5px;
+  height: 10px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.signup-consent__label {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-size: calc(13px * var(--font-scale));
+  line-height: 1.45;
+  color: #2d3142;
+}
+
+.signup-consent__badge {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: calc(10px * var(--font-scale));
+  font-weight: 700;
+  color: var(--color-badge-text);
+  background: var(--color-badge-bg);
+}
+
+.signup-consent__badge--optional {
+  color: #8a8fa3;
+  background: rgba(138, 143, 163, 0.12);
+}
+
+.signup-consent__view {
+  flex-shrink: 0;
+  padding: 4px 0;
+  font-family: var(--font-body);
+  font-size: calc(12px * var(--font-scale));
+  font-weight: 600;
+  color: var(--color-primary);
+  background: none;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.signup-consent__hint {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: calc(12px * var(--font-scale));
+  color: var(--color-text-muted);
+}

@@ -3,12 +3,13 @@
   max-width: 430px;
   margin: 0 auto;
   padding: 20px 28px 100px;
+  overflow-y: auto;
 }
 
 .signup__form {
   display: flex;
   flex-direction: column;
-  gap: 36px;
+  gap: 28px;
 }
 
 .signup__error {
@@ -34,7 +35,7 @@
 .email-input__label {
   font-size: calc(13px * var(--font-scale));
   font-weight: 700;
-  color: #B8AED0;
+  color: var(--color-text-muted);
 }
 
 .email-input__row {
@@ -80,7 +81,7 @@
 .email-input__line,
 .underline-input__line {
   height: 1px;
-  background: #D4CCE8;
+  background: var(--color-input-line);
 }
 
 .underline-input {
@@ -92,7 +93,7 @@
 .underline-input__label {
   font-size: calc(13px * var(--font-scale));
   font-weight: 700;
-  color: #B8AED0;
+  color: var(--color-text-muted);
 }
 
 .underline-input__field {
@@ -107,14 +108,14 @@
 }
 
 .underline-input__field::placeholder {
-  color: #B8AED0;
+  color: var(--color-text-muted);
   font-size: calc(15px * var(--font-scale));
 }
 
 .underline-input__hint {
   margin: 4px 0 0;
   font-size: calc(12px * var(--font-scale));
-  color: #B8AED0;
+  color: var(--color-text-muted);
 }
 
 .domain-sheet-overlay {
@@ -173,8 +174,8 @@
 }
 
 .domain-sheet__item--selected {
-  background: #E8E0F5;
-  color: #6B7FD7;
+  background: var(--color-selected-bg);
+  color: var(--color-selected-text);
   font-weight: 700;
 }
 
@@ -187,7 +188,7 @@
   font-size: calc(15px * var(--font-scale));
   color: #2D3142;
   background: #F5F3FA;
-  border: 1px solid #D4CCE8;
+  border: 1px solid var(--color-input-line);
   border-radius: 8px;
   outline: none;
 }
